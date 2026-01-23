@@ -1,0 +1,9 @@
+version = "1.0"
+kind = "sns.publish"
+
+[sns]
+topic_arn = "arn:aws:sns:us-east-2:970279879940:myna-test-topic"
+subject = "Test Message"
+
+[payload]
+data = "Hello from Myna SNS Test"

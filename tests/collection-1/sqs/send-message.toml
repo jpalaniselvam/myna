@@ -1,0 +1,18 @@
+version = "1.0"
+kind = "sqs.send_message"
+
+[sqs]
+delay_seconds = {{sqs_delay_seconds}}
+queue_url = "https://sqs.{{region}}.amazonaws.com/{{account_id}}/myna-test-queue"
+
+[sqs.message_attributes.TestAttr]
+DataType = "String"
+StringValue = "Hello Attribute"
+
+[payload]
+data = """
+{
+  "message": "Hello from Myna Standard Queue Test",
+  "timestamp": "2024-01-01T12:00:00Z"
+}
+"""

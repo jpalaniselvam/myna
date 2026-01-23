@@ -1,0 +1,22 @@
+version = "1.0"
+kind = "lambda.x"
+description = "Sample Lambda Invocation"
+region = "us-east-1"
+profile = "default"
+
+[lambda]
+function_name = "my-function"
+invocation_type = "DryRun"
+qualifier = "$LATEST"
+
+[payload]
+data = """
+{
+  "key": "value",
+  "user_id": "12345"
+}
+"""
+
+[pre]
+# Variables that can be used in the payload
+env = "dev"

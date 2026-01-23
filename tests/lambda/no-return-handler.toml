@@ -1,0 +1,14 @@
+version = "1.0"
+kind = "lambda.invoke"
+description = "Invoke No Return Handler (Event)"
+
+[lambda]
+function_name = "no-return-function"
+invocation_type = "Event"
+
+[payload]
+data = """
+{
+  "trigger": "fire-and-forget"
+}
+"""

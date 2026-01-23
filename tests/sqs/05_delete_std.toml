@@ -1,0 +1,11 @@
+version = "1.0"
+kind    = "sqs.delete_message"
+
+[pre]
+receipt_handle = "AQEB2DJoG2H57blzb2oDsgoQrEBC0pKYDDLkPZuS6w+rAWbdKBZStXWDW0x/Cn5z3hmBQkDrME4yVU7/NYUK1PmLdKjx/4uZr/WtnF2VIjUDRmDfsCoqWx1tEhiKh/NPnjghlkjTgVc+cnWKOJ4v+2l39qFHekP7itz17U05j1jUPrXhlzgXYJl8opBnkrvA0RCgLmxS75BdymxdYVPbzTECsY2LkkbiUfg/FZgjzkC6GNjmiKJv9lUzYWt9/l6mQDnQmKmY/gYP5iywavfvUpvSYGx3p/OggqOS/gtZKotAR/HJRbZumN8RlotTNQPvz5+pcHSlszHv/jNSCun73Pq9RwkcW58BaJezBR/bi2M5J84AIXYCQpdO4Nq4aHlG1sKFeE1kwFLLEFcia7PCvvhYVg=="
+
+[sqs]
+queue_url = "https://sqs.us-east-2.amazonaws.com/970279879940/myna-test-queue"
+receipt_handle = "{{receipt_handle}}"
+# Note: In a real scenario, you'd likely chain checking the previous step's output variable
+# Ensure your runner supports this or manually paste a handle for isolated testing.

@@ -1,0 +1,15 @@
+version = "1.0"
+kind    = "sqs.send_message"
+
+[sqs]
+queue_url = "https://sqs.us-east-2.amazonaws.com/970279879940/myna-test-fifo.fifo"
+message_group_id = "group1"
+message_deduplication_id = "dedup-123456"
+
+[payload]
+data = """
+{
+  "message": "Hello from Myna FIFO Queue Test",
+  "order": 1
+}
+"""

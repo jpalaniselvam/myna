@@ -1,0 +1,11 @@
+version = "1.0"
+kind    = "eventbridge.put_events"
+description = "send-file-payload"
+
+[eventbridge]
+bus_name    = "default"
+source      = "com.myna.test"
+detail_type = "FileEvent"
+
+[payload]
+file = "./event.json"

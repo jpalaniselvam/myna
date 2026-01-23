@@ -1,0 +1,17 @@
+version = "1.0"
+kind = "lambda.invoke"
+description = "Invoke Context Handler"
+
+[lambda]
+function_name = "context-handler"
+
+[lambda.client_context]
+custom_app = "myna_test_suite"
+custom_env = "ci"
+
+[payload]
+data = """
+{
+  "data": "verify_context"
+}
+"""

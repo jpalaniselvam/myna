@@ -1,0 +1,19 @@
+version = "1.0"
+kind = "lambda.invoke"
+description = "Invoke JSON Handler"
+
+[lambda]
+function_name = "json-handler"
+invocation_type = "RequestResponse"
+
+[pre]
+user_id = "user_123"
+
+[payload]
+data = """
+{
+  "user_id": "{{user_id}}",
+  "key": "value",
+  "input_check": "hello"
+}
+"""

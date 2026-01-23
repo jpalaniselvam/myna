@@ -1,0 +1,21 @@
+version = "1.0"
+kind    = "sns.publish"
+
+[sns]
+topic_arn = "arn:aws:sns:us-east-2:970279879940:myna-test-topic"
+
+[sns.message_attributes.EventType]
+DataType    = "String"
+StringValue = "OrderCreated"
+
+[sns.message_attributes.Priority]
+DataType    = "Number"
+StringValue = "1"
+
+[payload]
+data = """
+{
+  "order_id": "123",
+  "status": "pending"
+}
+"""

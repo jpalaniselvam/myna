@@ -1,0 +1,55 @@
+// @ts-check
+import { defineConfig } from 'astro/config';
+import starlight from '@astrojs/starlight';
+
+// https://astro.build/config
+export default defineConfig({
+	site: 'https://jpalaniselvam.github.io',
+	base: '/myna',
+	integrations: [
+		starlight({
+			title: 'Myna',
+			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/jpalaniselvam/myna' }],
+			sidebar: [
+				{
+					label: 'Introduction',
+					items: [
+						{ label: 'Why myna?', slug: 'introduction/why' },
+						{ label: 'Design Overview', slug: 'design-overview' },
+					],
+				},
+				{
+					label: 'Getting Started',
+					items: [
+						{ label: 'Installation', slug: 'getting-started/installation' },
+						{ label: 'Basic Usage', slug: 'getting-started/basic-usage' },
+					],
+				},
+				{
+					label: 'Guides',
+					items: [
+						{ label: 'Authentication', slug: 'guides/authentication' },
+						{ label: 'Collections', slug: 'guides/collections' },
+						{ label: 'Environments', slug: 'guides/environments' },
+						{ label: 'Actions', slug: 'guides/actions' },
+						{ label: 'Payload Handling', slug: 'guides/payloads' },
+						{ label: 'Variable Resolution', slug: 'guides/variable-resolution' },
+						{
+							label: 'AWS Services',
+							items: [
+								{ label: 'Lambda', slug: 'guides/services/lambda' },
+								{ label: 'SQS', slug: 'guides/services/sqs' },
+								{ label: 'SNS', slug: 'guides/services/sns' },
+								{ label: 'EventBridge', slug: 'guides/services/eventbridge' },
+							],
+						},
+					],
+				},
+				{
+					label: 'Reference',
+					autogenerate: { directory: 'reference' },
+				},
+			],
+		}),
+	],
+});

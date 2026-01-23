@@ -1,0 +1,8 @@
+version = "1.0"
+kind = "sqs.receive_message"
+
+[sqs]
+queue_url = "https://sqs.us-east-2.amazonaws.com/970279879940/myna-test-queue"
+max_number_of_messages = 5
+wait_time_seconds = 5
+message_attribute_names = ["All"]

@@ -1,0 +1,15 @@
+version = "1.0"
+kind    = "sns.publish"
+
+[sns]
+topic_arn = "arn:aws:sns:us-east-2:970279879940:myna-test-topic"
+message_structure = "json"
+
+[payload]
+data = """
+{
+  "default": "Default message content",
+  "email": "Email specific content",
+  "sqs": "SQS specific content"
+}
+"""

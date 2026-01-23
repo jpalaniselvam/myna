@@ -1,0 +1,17 @@
+version = "1.0"
+kind    = "eventbridge.put_events"
+description = "send-with-resources"
+
+[eventbridge]
+bus_name    = "default"
+source      = "com.myna.test"
+detail_type = "ResourceEvent"
+resources   = ["arn:aws:iam::123456789012:user/test-user"]
+
+[payload]
+data = """
+{
+  "action": "login",
+  "status": "success"
+}
+"""

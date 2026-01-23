@@ -1,0 +1,7 @@
+version = "1.0"
+kind    = "sqs.start_message_move_task"
+
+[sqs]
+source_arn = "arn:aws:sqs:us-east-2:970279879940:myna-test-dlq"
+destination_arn = "arn:aws:sqs:us-east-2:970279879940:myna-test-queue"
+max_messages_per_second = 10

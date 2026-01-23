@@ -1,0 +1,60 @@
+---
+title: myna
+description: A Git-first CLI for executing and replaying AWS serverless actions. Think Postman for AWS serverless.
+template: splash
+hero:
+  tagline: A Git-first CLI for executing and replaying AWS serverless actions. Think Postman for AWS serverless.
+  image:
+    file: ../../assets/myna_logo.png
+  actions:
+    - text: Get Started
+      link: /design-overview/
+      icon: right-arrow
+    - text: View on GitHub
+      link: https://github.com/jpalaniselvam/myna
+      icon: github
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+## Why myna?
+
+Modern serverless systems are built from events, queues, and functions, not just HTTP endpoints. Yet, most developer tools are still API-first. `myna` bridges this gap by providing a repeatable, Git-friendly way to interact with AWS serverless primitives.
+
+<CardGrid stagger>
+	<Card title="Postman for Serverless" icon="rocket">
+		Configure Lambda requests, SQS messages, or EventBridge events in simple TOML files and execute them with a single command.
+	</Card>
+	<Card title="Git-First Design" icon="document">
+		Store your test collections as version-controlled files. No more opaque databases or proprietary formats—just clean, readable TOML.
+	</Card>
+	<Card title="Repeatable Actions" icon="refresh">
+		Replay real events deterministically. Chain actions together without writing brittle glue code or one-off scripts.
+	</Card>
+	<Card title="Environment Savvy" icon="setting">
+		Easily manage variables across `local`, `dev`, and `prod` environments. Switch contexts seamlessly while keeping your action definitions constant.
+	</Card>
+	<Card title="CLI Power" icon="terminal">
+		Built for the terminal. Perfect for local development, debugging in production, or running automated tests in CI/CD pipelines.
+	</Card>
+	<Card title="AWS Native" icon="external">
+		Directly support for Lambda, S3, SQS, SNS, and EventBridge. Perform basic operations without switching between AWS Console tabs.
+	</Card>
+</CardGrid>
+
+## How it Works
+
+`myna` organizes your AWS interactions into **Collections** and **Actions**. 
+
+```text
+my-collection/
+├── myna.toml          # Collection metadata
+├── environments/      # Environment-specific variables
+│   ├── dev.toml
+│   └── prod.toml
+├── invoke-lambda.toml # Action definition
+└── send-to-sqs.toml   # Action definition
+```
+
+Deploying a serverless stack is only half the battle. Testing and replaying events is where `myna` shines.

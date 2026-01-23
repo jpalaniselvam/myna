@@ -1,0 +1,9 @@
+version = "1.0"
+kind    = "sqs.send_message"
+
+# Sending directly to DLQ
+[sqs]
+queue_url = "https://sqs.us-east-2.amazonaws.com/970279879940/myna-test-dlq"
+
+[payload]
+data = "This message is stuck in DLQ"

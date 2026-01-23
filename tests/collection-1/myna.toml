@@ -1,0 +1,8 @@
+version = "1.0"
+kind = "collection"
+description = "My collection description"
+profile = "{{profile}}"
+region = "{{region}}"
+[pre]
+account_id = "970279879940"
+sqs_delay_seconds = 0

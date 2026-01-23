@@ -1,0 +1,14 @@
+version = "1.0"
+kind = "lambda.invoke"
+description = "Invoke Timeout Handler (Should Fail)"
+timeout_ms = 2000
+
+[lambda]
+function_name = "timeout-handler"
+
+[payload]
+data = """
+{
+  "sleepTimeMs": 3000
+}
+"""

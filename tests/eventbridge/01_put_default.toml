@@ -1,0 +1,16 @@
+version = "1.0"
+kind    = "eventbridge.put_events"
+description = "send-to-default-bus"
+
+[eventbridge]
+bus_name    = "default"
+source      = "com.myna.test"
+detail_type = "TestEvent"
+
+[payload]
+data = """
+{
+  "message": "Hello Default Bus",
+  "timestamp": "2024-01-01T12:00:00Z"
+}
+"""

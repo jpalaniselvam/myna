@@ -1,0 +1,10 @@
+version = "1.0"
+kind = "lambda.invoke"
+description = "Invoke Protobuf Handler"
+
+[lambda]
+function_name = "proto-buf-handler"
+invocation_type = "RequestResponse"
+
+[payload]
+file = "./fixtures/person.json"

@@ -1,0 +1,16 @@
+version = "1.0"
+kind    = "eventbridge.put_events"
+description = "send-to-custom-bus"
+
+[eventbridge]
+bus_name    = "myna-test-bus"
+source      = "com.myna.test"
+detail_type = "CustomBusEvent"
+
+[payload]
+data = """
+{
+  "message": "Hello Custom Bus",
+  "id": 123
+}
+"""

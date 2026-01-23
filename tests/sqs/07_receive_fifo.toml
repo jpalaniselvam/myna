@@ -1,0 +1,7 @@
+version = "1.0"
+kind    = "sqs.receive_message"
+
+[sqs]
+queue_url = "https://sqs.us-east-2.amazonaws.com/970279879940/myna-test-fifo.fifo"
+max_number_of_messages = 1
+wait_time_seconds = 2

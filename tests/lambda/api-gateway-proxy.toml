@@ -1,0 +1,23 @@
+version = "1.0"
+kind = "lambda.invoke"
+description = "Invoke API Gateway Proxy Handler"
+
+[lambda]
+function_name = "api-gateway-proxy"
+
+[payload]
+data = """
+{
+  "httpMethod": "POST",
+  "path": "/v1/users",
+  "body": "{\\"username\\": \\"myna_user\\"}",
+  "headers": {
+    "Content-Type": "application/json",
+    "Authorization": "Bearer token123"
+  },
+  "queryStringParameters": {
+    "active": "true",
+    "role": "admin"
+  }
+}
+"""
