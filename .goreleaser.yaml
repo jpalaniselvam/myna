@@ -51,6 +51,7 @@ brews:
     description: "Myna CLI - The Postman for AWS services"
     install: |
       bin.install "myna"
+    skip_upload: auto
 
 changelog:
   sort: asc
