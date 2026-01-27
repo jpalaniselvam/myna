@@ -31,7 +31,7 @@ func Resolve(payload baseTypes.Payload, baseDir string, resolver *varsub.Resolve
 
 	// 2. Check for 'data' payload (if file not handled)
 	if payload.Data != "" {
-		return []byte(payload.Data), nil
+		return resolver.Resolve([]byte(payload.Data)), nil
 	}
 
 	// Return nil if no payload is found (this is valid, some actions might not have payload)
