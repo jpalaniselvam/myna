@@ -15,7 +15,7 @@ Based on our build configuration, `myna` supports the following:
 
 ## Installation Methods
 
-### Windows (winget)
+### Windows (winget) `coming soon`
 
 The easiest way to install `myna` on Windows is via `winget`:
 
@@ -23,7 +23,7 @@ The easiest way to install `myna` on Windows is via `winget`:
 winget install jpalaniselvam.myna
 ```
 
-### Homebrew (macOS)
+### Homebrew (macOS) `coming soon`
 
 If you use Homebrew on macOS, you can install `myna` from our tap:
 
