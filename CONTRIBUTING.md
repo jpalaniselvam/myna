@@ -60,6 +60,11 @@ First off, thanks for taking the time to contribute! `myna` is a community-drive
     ```bash
     go build -o myna cmd/myna/main.go
     ```
+4.  Setup Git Hooks (Optional but recommended):
+    ```bash
+    git config core.hooksPath .githooks
+    ```
+    This ensures that the pre-commit hook is active, which runs `go fmt` on your staged files.
 
 ### Code Style
 
