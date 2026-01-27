@@ -2,7 +2,6 @@ package action
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -43,10 +42,10 @@ type SQSMessageAttrVal struct {
 	BinaryValue []byte `toml:"BinaryValue"`
 }
 
-func runSQSAction(cfg aws.Config, content []byte, payload []byte) error {
+func runSQSAction(cfg aws.Config, content []byte, payload []byte) (interface{}, error) {
 	var action SQSAction
 	if err := parser.Unmarshal(content, &action); err != nil {
-		return fmt.Errorf("failed to parse sqs action: %w", err)
+		return nil, fmt.Errorf("failed to parse sqs action: %w", err)
 	}
 
 	client := sqs.NewFromConfig(cfg)
@@ -67,20 +66,14 @@ func runSQSAction(cfg aws.Config, content []byte, payload []byte) error {
 	case baseTypes.KindSQSMoveTask:
 		output, err = runSQSMoveTask(ctx, client, action)
 	default:
-		return fmt.Errorf("unsupported sqs kind: %s", action.Kind)
+		return nil, fmt.Errorf("unsupported sqs kind: %s", action.Kind)
 	}
 
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	// Print output (JSON)
-	if output != nil {
-		b, _ := json.MarshalIndent(output, "", "  ")
-		fmt.Println(string(b))
-	}
-
-	return nil
+	return output, nil
 }
 
 // runSQSSend handles sqs.send_message
