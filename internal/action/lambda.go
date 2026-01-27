@@ -43,15 +43,15 @@ func (l *LambdaOutput) String() string {
 	return string(b)
 }
 
-func runLambdaAction(cfg aws.Config, content []byte, payload []byte) error {
+func runLambdaAction(cfg aws.Config, content []byte, payload []byte) (interface{}, error) {
 	var action LambdaAction
 	if err := parser.Unmarshal(content, &action); err != nil {
-		return fmt.Errorf("failed to parse lambda action: %w", err)
+		return nil, fmt.Errorf("failed to parse lambda action: %w", err)
 	}
 
 	input, err := buildInvokeInput(action, payload)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	client := lambda.NewFromConfig(cfg)
@@ -65,17 +65,15 @@ func runLambdaAction(cfg aws.Config, content []byte, payload []byte) error {
 
 	resp, err := client.Invoke(ctx, input)
 	if err != nil {
-		return fmt.Errorf("failed to invoke lambda: %w", err)
+		return nil, fmt.Errorf("failed to invoke lambda: %w", err)
 	}
 
 	output, err := processLambdaOutput(resp)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	fmt.Println(output.String())
-
-	return nil
+	return output, nil
 }
 
 func buildInvokeInput(action LambdaAction, payload []byte) (*lambda.InvokeInput, error) {

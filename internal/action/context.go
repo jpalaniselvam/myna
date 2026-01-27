@@ -103,19 +103,28 @@ type ResolvedAction struct {
 func LoadAction(filePath string, resolver *varsub.Resolver) (*ResolvedAction, error) {
 	content, err := os.ReadFile(filePath)
 	if err != nil {
-		return nil, fmt.Errorf("failed to read myna.toml: %w", err)
+		return nil, fmt.Errorf("failed to read action file: %w", err)
 	}
 
-	content = resolver.Resolve(content)
-
-	var baseAction baseTypes.BaseAction
-	if err := parser.Unmarshal(content, &baseAction); err != nil {
+	// 1. Initial parse into generic map to get [pre] block (unresolved)
+	// We use map[string]interface{} to avoid type errors with unresolved {{var}} in non-string fields
+	var genericMap map[string]interface{}
+	if err := parser.Unmarshal(content, &genericMap); err != nil {
 		return nil, fmt.Errorf("failed to parse %s: %w", filePath, err)
 	}
 
-	if baseAction.Pre == nil {
-		resolver.AddScope(baseAction.Pre)
-		content = resolver.Resolve(content)
+	// 2. Add [pre] variables to resolver scope if they exist
+	if pre, ok := genericMap["pre"].(map[string]interface{}); ok {
+		resolver.AddScope(pre)
+	}
+
+	// 3. Resolve variables in the file content using the updated resolver
+	content = resolver.Resolve(content)
+
+	// 4. Final parse of the resolved content into the typed struct
+	var baseAction baseTypes.BaseAction
+	if err := parser.Unmarshal(content, &baseAction); err != nil {
+		return nil, fmt.Errorf("failed to parse resolved %s: %w", filePath, err)
 	}
 
 	action := &ResolvedAction{

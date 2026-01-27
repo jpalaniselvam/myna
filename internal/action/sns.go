@@ -49,15 +49,15 @@ func (s *SNSOutput) String() string {
 	return string(b)
 }
 
-func runSNSAction(cfg aws.Config, content []byte, payload []byte) error {
+func runSNSAction(cfg aws.Config, content []byte, payload []byte) (interface{}, error) {
 	var action SNSAction
 	if err := parser.Unmarshal(content, &action); err != nil {
-		return fmt.Errorf("failed to parse sns action: %w", err)
+		return nil, fmt.Errorf("failed to parse sns action: %w", err)
 	}
 
 	input, err := buildPublishInput(action, payload)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	client := sns.NewFromConfig(cfg)
@@ -65,7 +65,7 @@ func runSNSAction(cfg aws.Config, content []byte, payload []byte) error {
 	ctx := context.TODO()
 	resp, err := client.Publish(ctx, input)
 	if err != nil {
-		return fmt.Errorf("failed to publish to sns: %w", err)
+		return nil, fmt.Errorf("failed to publish to sns: %w", err)
 	}
 
 	output := &SNSOutput{
@@ -73,9 +73,7 @@ func runSNSAction(cfg aws.Config, content []byte, payload []byte) error {
 		SequenceNumber: aws.ToString(resp.SequenceNumber),
 	}
 
-	fmt.Println(output.String())
-
-	return nil
+	return output, nil
 }
 
 func buildPublishInput(action SNSAction, payload []byte) (*sns.PublishInput, error) {

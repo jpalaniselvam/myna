@@ -46,15 +46,15 @@ func (e *EventBridgeOutput) String() string {
 	return string(b)
 }
 
-func runEventBridgeAction(cfg aws.Config, content []byte, payload []byte) error {
+func runEventBridgeAction(cfg aws.Config, content []byte, payload []byte) (interface{}, error) {
 	var action EventBridgeAction
 	if err := parser.Unmarshal(content, &action); err != nil {
-		return fmt.Errorf("failed to parse eventbridge action: %w", err)
+		return nil, fmt.Errorf("failed to parse eventbridge action: %w", err)
 	}
 
 	input, err := buildPutEventsInput(action, payload)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	client := eventbridge.NewFromConfig(cfg)
@@ -68,13 +68,11 @@ func runEventBridgeAction(cfg aws.Config, content []byte, payload []byte) error 
 
 	resp, err := client.PutEvents(ctx, input)
 	if err != nil {
-		return fmt.Errorf("failed to put events: %w", err)
+		return nil, fmt.Errorf("failed to put events: %w", err)
 	}
 
 	output := processEventBridgeOutput(resp)
-	fmt.Println(output.String())
-
-	return nil
+	return output, nil
 }
 
 func buildPutEventsInput(action EventBridgeAction, payload []byte) (*eventbridge.PutEventsInput, error) {
