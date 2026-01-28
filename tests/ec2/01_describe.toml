@@ -1,0 +1,5 @@
+version = "1.0"
+kind = "ec2.describe_instances"
+
+[ec2]
+filters = { "tag:Name" = ["myna-test-instance"] }
