@@ -1,0 +1,5 @@
+version = "1.0"
+kind = "rds.reboot_db_instance"
+
+[rds]
+db_instance_identifier = "myna-test-db"
