@@ -1,0 +1,7 @@
+version = "1.0"
+kind = "ec2.reboot_instances"
+
+[ec2]
+# Replace with Instance ID from describe output
+instance_ids = ["i-REPLACE_ME"]
+dry_run = true
