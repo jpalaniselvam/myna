@@ -1,0 +1,7 @@
+version = "1.0"
+kind = "sfn.list_state_machines"
+role_arn = "arn:aws:iam::{{account_id}}:role/myna-test-sfn-role"
+
+[pre]
+account_id = ""
+
