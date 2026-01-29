@@ -1,4 +1,4 @@
-package action
+package context
 
 import (
 	"fmt"
@@ -98,6 +98,14 @@ func LoadCollection(filePath string, resolver *varsub.Resolver) (*baseTypes.Coll
 type ResolvedAction struct {
 	base    baseTypes.BaseAction
 	content []byte
+}
+
+func (r *ResolvedAction) Base() baseTypes.BaseAction {
+	return r.base
+}
+
+func (r *ResolvedAction) Content() []byte {
+	return r.content
 }
 
 func LoadAction(filePath string, resolver *varsub.Resolver) (*ResolvedAction, error) {
