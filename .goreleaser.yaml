@@ -47,11 +47,20 @@ brews:
       owner: jpalaniselvam
       name: homebrew-tap
     directory: Formula
-    homepage: "https://github.com/jpalaniselvam/myna"
+    homepage: "https://jpalaniselvam.github.io/myna"
     description: "Myna CLI - The Postman for AWS services"
     install: |
       bin.install "myna"
     skip_upload: auto
+
+scoops:
+  - repository:
+      owner: jpalaniselvam
+      name: scoop-bucket
+    homepage: "https://jpalaniselvam.github.io/myna"
+    description: "Myna CLI - The Postman for AWS services"
+    license: "Apache-2.0"
+
 
 changelog:
   sort: asc
