@@ -1,0 +1,14 @@
+version = "1.0"
+kind = "ses.send_email"
+
+[pre]
+email = ""
+to_addresses = ["{{email}}"]
+
+[ses]
+source = "{{email}}"
+to_addresses = {{to_addresses}}
+subject = "Myna Test Email"
+
+[payload]
+data = "Hello from Myna!"

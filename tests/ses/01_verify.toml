@@ -1,0 +1,8 @@
+version = "1.0"
+kind = "ses.verify_email_identity"
+
+[pre]
+email = ""
+
+[ses]
+email_address = "{{email}}"
