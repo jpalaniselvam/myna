@@ -60,14 +60,30 @@ func RunAction(filePath string, envName string) error {
 	}
 
 	switch actionKind {
+	// Lambda
 	case baseTypes.KindLambdaInvoke:
 		actionResult, actionErr = runLambdaAction(cfg, action.content, payloadData)
+	// SNS
 	case baseTypes.KindSNSPublish:
 		actionResult, actionErr = runSNSAction(cfg, action.content, payloadData)
+	// SQS
 	case baseTypes.KindSQSSend, baseTypes.KindSQSReceive, baseTypes.KindSQSDelete, baseTypes.KindSQSPurge, baseTypes.KindSQSMoveTask:
 		actionResult, actionErr = runSQSAction(cfg, action.content, payloadData)
+	// EventBridge
 	case baseTypes.KindEventBridgePutEvents:
 		actionResult, actionErr = runEventBridgeAction(cfg, action.content, payloadData)
+	// EC2
+	case baseTypes.KindEC2DescribeInstances, baseTypes.KindEC2StartInstances, baseTypes.KindEC2StopInstances, baseTypes.KindEC2RebootInstances, baseTypes.KindEC2TerminateInstances:
+		actionResult, actionErr = runEC2Action(cfg, action.content)
+	// SES
+	case baseTypes.KindSESSendEmail, baseTypes.KindSESVerifyEmailIdentity:
+		actionResult, actionErr = runSESAction(cfg, action.content, payloadData)
+	// RDS
+	case baseTypes.KindRDSDescribeDBInstances, baseTypes.KindRDSStartDBInstance, baseTypes.KindRDSStopDBInstance, baseTypes.KindRDSRebootDBInstance:
+		actionResult, actionErr = runRDSAction(cfg, action.content)
+	// SFN
+	case baseTypes.KindSFNListStateMachines, baseTypes.KindSFNStartExecution, baseTypes.KindSFNDescribeExecution, baseTypes.KindSFNStopExecution:
+		actionResult, actionErr = runSFNAction(cfg, action.content, payloadData)
 	default:
 		actionErr = fmt.Errorf("unsupported action kind: %s", actionKind)
 	}
