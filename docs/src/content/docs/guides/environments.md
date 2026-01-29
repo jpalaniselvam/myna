@@ -32,10 +32,10 @@ API_URL = "https://api-dev.example.com"
 
 ## Using Environments
 
-To run an action using a specific environment's configuration, use the `--env` flag with the `dispatch` command:
+To run an action using a specific environment's configuration, use the `--env` flag with the `run` command:
 
 ```bash
-myna dispatch ./actions/invoke.toml --env dev
+myna run ./actions/invoke.toml --env dev
 ```
 
 This command will:
