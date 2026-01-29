@@ -9,6 +9,7 @@ import (
 
 	"github.com/aws/smithy-go"
 	"github.com/jpalaniselvam/myna/internal/auth"
+	mynaContext "github.com/jpalaniselvam/myna/internal/context"
 	"github.com/jpalaniselvam/myna/internal/payload"
 	baseTypes "github.com/jpalaniselvam/myna/internal/types"
 )
@@ -29,27 +30,27 @@ func RunAction(filePath string, envName string) error {
 		printActionOutput(actionKind, actionProfile, actionRegion, actionResult, actionErr)
 	}()
 
-	execCtx, err := BuildExecutionContext(filePath, envName)
+	execCtx, err := mynaContext.BuildExecutionContext(filePath, envName)
 	if err != nil {
 		actionErr = err
 		return nil
 	}
 
-	action, err := LoadAction(filePath, execCtx.Resolver)
+	action, err := mynaContext.LoadAction(filePath, execCtx.Resolver)
 	if err != nil {
 		actionErr = fmt.Errorf("failed to load action: %w", err)
 		return nil
 	}
 
-	actionKind = action.base.Kind
-	profile, region := execCtx.InheritConfig(action.base.Profile, action.base.Region)
+	actionKind = action.Base().Kind
+	profile, region := execCtx.InheritConfig(action.Base().Profile, action.Base().Region)
 	actionProfile = profile
 	actionRegion = region
 
 	baseDir := filepath.Dir(filePath)
-	payloadData, err := payload.Resolve(action.base.Payload, baseDir, execCtx.Resolver)
+	payloadData, err := payload.Resolve(action.Base().Payload, baseDir, execCtx.Resolver)
 	if err != nil {
-		actionErr = fmt.Errorf("unsupported payload: %s", action.base.Payload)
+		actionErr = fmt.Errorf("unsupported payload: %s", action.Base().Payload)
 		return nil
 	}
 
@@ -62,28 +63,28 @@ func RunAction(filePath string, envName string) error {
 	switch actionKind {
 	// Lambda
 	case baseTypes.KindLambdaInvoke:
-		actionResult, actionErr = runLambdaAction(cfg, action.content, payloadData)
+		actionResult, actionErr = runLambdaAction(cfg, action.Content(), payloadData)
 	// SNS
 	case baseTypes.KindSNSPublish:
-		actionResult, actionErr = runSNSAction(cfg, action.content, payloadData)
+		actionResult, actionErr = runSNSAction(cfg, action.Content(), payloadData)
 	// SQS
 	case baseTypes.KindSQSSend, baseTypes.KindSQSReceive, baseTypes.KindSQSDelete, baseTypes.KindSQSPurge, baseTypes.KindSQSMoveTask:
-		actionResult, actionErr = runSQSAction(cfg, action.content, payloadData)
+		actionResult, actionErr = runSQSAction(cfg, action.Content(), payloadData)
 	// EventBridge
 	case baseTypes.KindEventBridgePutEvents:
-		actionResult, actionErr = runEventBridgeAction(cfg, action.content, payloadData)
+		actionResult, actionErr = runEventBridgeAction(cfg, action.Content(), payloadData)
 	// EC2
 	case baseTypes.KindEC2DescribeInstances, baseTypes.KindEC2StartInstances, baseTypes.KindEC2StopInstances, baseTypes.KindEC2RebootInstances, baseTypes.KindEC2TerminateInstances:
-		actionResult, actionErr = runEC2Action(cfg, action.content)
+		actionResult, actionErr = runEC2Action(cfg, action.Content())
 	// SES
 	case baseTypes.KindSESSendEmail, baseTypes.KindSESVerifyEmailIdentity:
-		actionResult, actionErr = runSESAction(cfg, action.content, payloadData)
+		actionResult, actionErr = runSESAction(cfg, action.Content(), payloadData)
 	// RDS
 	case baseTypes.KindRDSDescribeDBInstances, baseTypes.KindRDSStartDBInstance, baseTypes.KindRDSStopDBInstance, baseTypes.KindRDSRebootDBInstance:
-		actionResult, actionErr = runRDSAction(cfg, action.content)
+		actionResult, actionErr = runRDSAction(cfg, action.Content())
 	// SFN
 	case baseTypes.KindSFNListStateMachines, baseTypes.KindSFNStartExecution, baseTypes.KindSFNDescribeExecution, baseTypes.KindSFNStopExecution:
-		actionResult, actionErr = runSFNAction(cfg, action.content, payloadData)
+		actionResult, actionErr = runSFNAction(cfg, action.Content(), payloadData)
 	default:
 		actionErr = fmt.Errorf("unsupported action kind: %s", actionKind)
 	}
