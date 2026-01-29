@@ -1,13 +1,13 @@
 ---
 title: Basic Usage
-description: Learn how to dispatch your first AWS serverless action with myna.
+description: Learn how to run your first AWS serverless action with myna.
 ---
 
 `myna` is built around the concept of **Actions**. An action is a simple TOML file that describes an AWS operation, like invoking a Lambda function or sending an SQS message.
 
-## The `dispatch` Command
+## The `run` Command
 
-The primary way to use `myna` is the `dispatch` command. It executes a single action file.
+The primary way to use `myna` is the `run` command. It executes a single action file.
 
 ## Your First Action File
 
@@ -34,12 +34,12 @@ data = """
 """
 ```
 
-### Simple Dispatch
+### Simple Execution
 
 To run the action defined above:
 
 ```bash
-myna dispatch ./my-action.toml
+myna run ./my-action.toml
 ```
 
 ## Execution Contexts
@@ -59,7 +59,7 @@ If `myna` finds a `myna.toml` file in the current directory or any parent direct
 When working within a collection, you can switch between different environments (like `dev` or `prod`) using the `--env` flag:
 
 ```bash
-myna dispatch ./actions/invoke-lambda.toml --env dev
+myna run ./actions/invoke-lambda.toml --env dev
 ```
 
 This will load variables from `environments/dev.toml` relative to your collection root.

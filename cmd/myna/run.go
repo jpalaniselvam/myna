@@ -9,10 +9,10 @@ import (
 
 var envFlag string
 
-var dispatchCmd = &cobra.Command{
-	Use:   "dispatch [file]",
+var runCmd = &cobra.Command{
+	Use:   "run [file]",
 	Short: "Execute a specific action or workflow",
-	Long:  `Dispatch reads the provided TOML file (Action or Workflow) and executes it against the configured environment.`,
+	Long:  `Run reads the provided TOML file (Action or Workflow) and executes it against the configured environment.`,
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		file := args[0]
@@ -23,6 +23,6 @@ var dispatchCmd = &cobra.Command{
 }
 
 func init() {
-	dispatchCmd.Flags().StringVar(&envFlag, "env", "", "Environment to use (e.g., dev, prod)")
-	rootCmd.AddCommand(dispatchCmd)
+	runCmd.Flags().StringVar(&envFlag, "env", "", "Environment to use (e.g., dev, prod)")
+	rootCmd.AddCommand(runCmd)
 }
