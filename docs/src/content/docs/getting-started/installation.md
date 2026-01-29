@@ -15,15 +15,16 @@ Based on our build configuration, `myna` supports the following:
 
 ## Installation Methods
 
-### Windows (winget) `coming soon`
+### Windows (Scoop)
 
-The easiest way to install `myna` on Windows is via `winget`:
+The easiest way to install `myna` on Windows is via `scoop`:
 
 ```powershell
-winget install jpalaniselvam.myna
+scoop bucket add myna https://github.com/jpalaniselvam/scoop-bucket
+scoop install myna
 ```
 
-### Homebrew (macOS) `coming soon`
+### Homebrew (macOS)
 
 If you use Homebrew on macOS, you can install `myna` from our tap:
 
