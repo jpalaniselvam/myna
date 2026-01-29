@@ -46,8 +46,7 @@ export default defineConfig({
 								{ label: 'Step Functions', slug: 'guides/services/step-functions' },
 								{ label: 'DynamoDB', slug: 'guides/services/dynamodb' },
 								{ label: 'RDS', slug: 'guides/services/rds' },
-								{ label: 'SES', slug: 'guides/services/ses' },
-								{ label: 'ECS', slug: 'guides/services/ecs' },
+								{ label: 'SES', slug: 'guides/services/ses' }
 							],
 						},
 					],
