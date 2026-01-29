@@ -1,0 +1,18 @@
+version = "1.0"
+kind = "sfn.start_execution"
+
+[pre]
+account_id = ""
+region = "us-east-2"
+
+[sfn]
+# Replace ACCOUNT_ID with your AWS Account ID
+state_machine_arn = "arn:aws:states:{{region}}:{{account_id}}:stateMachine:myna-test-state-machine"
+name = "test-execution-1"
+
+[payload]
+data = """
+{
+  "input_key": "input_value"
+}
+"""

@@ -1,0 +1,10 @@
+version = "1.0"
+kind = "sfn.stop_execution"
+
+[pre]
+account_id = ""
+region = "us-east-2"
+
+[sfn]
+execution_arn = "arn:aws:states:{{region}}:{{account_id}}:execution:myna-test-state-machine:test-execution-1"
+cause = "Testing stop"
