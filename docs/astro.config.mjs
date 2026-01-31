@@ -15,7 +15,6 @@ export default defineConfig({
 					label: 'Introduction',
 					items: [
 						{ label: 'Why myna?', slug: 'introduction/why' },
-						{ label: 'Design Overview', slug: 'design-overview' },
 					],
 				},
 				{
@@ -28,6 +27,7 @@ export default defineConfig({
 				{
 					label: 'Guides',
 					items: [
+						{ label: 'Design Overview', slug: 'guides/design-overview' },
 						{ label: 'Authentication', slug: 'guides/authentication' },
 						{ label: 'Collections', slug: 'guides/collections' },
 						{ label: 'Environments', slug: 'guides/environments' },

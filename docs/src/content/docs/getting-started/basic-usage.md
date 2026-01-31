@@ -75,5 +75,6 @@ This hierarchy allows you to define defaults at the collection level and overrid
 
 ## Next Steps
 
-- Explore [Design Overview](/design-overview/) to learn more about the project structure.
-- Check out the [CLI Reference](/reference/example/) for detailed command options.
+- Explore [Design Overview](/myna/guides/design-overview/) to learn more about the project structure.
+- Check out the [Action Guide](/myna/guides/actions/) to learn more about configuring actions.
+
