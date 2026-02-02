@@ -1,2 +1,10 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
+<script>
+    import CollectionManager from '$lib/components/CollectionManager.svelte';
+</script>
+
+<div class="min-h-screen py-10">
+    <div class="container mx-auto">
+        <h1 class="text-4xl text-center font-bold mb-10 text-gray-800">Myna Collection Manager</h1>
+        <CollectionManager />
+    </div>
+</div>
