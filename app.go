@@ -67,3 +67,8 @@ func (a *App) UpdateEnvVar(collectionPath, envName, key, value string) error {
 func (a *App) DeleteEnvVar(collectionPath, envName, key string) error {
 	return collection.DeleteEnvVar(collectionPath, envName, key)
 }
+
+// CreateAction creates a new action in a collection
+func (a *App) CreateAction(input collection.CreateActionInput) error {
+	return collection.CreateAction(input)
+}
