@@ -12,38 +12,8 @@ import (
 	baseTypes "github.com/jpalaniselvam/myna/internal/types"
 )
 
-// SQSAction represents the structure of an SQS action TOML file
-type SQSAction struct {
-	baseTypes.BaseAction
-	SQS SQSConfig `toml:"sqs"`
-}
-
-// SQSConfig defines the SQS configuration parameters
-type SQSConfig struct {
-	QueueURL               string                       `toml:"queue_url"`
-	DelaySeconds           int32                        `toml:"delay_seconds"`
-	MessageGroupId         string                       `toml:"message_group_id"`
-	MessageDeduplicationId string                       `toml:"message_deduplication_id"`
-	MaxNumberOfMessages    int32                        `toml:"max_number_of_messages"`
-	WaitTimeSeconds        int32                        `toml:"wait_time_seconds"`
-	VisibilityTimeout      int32                        `toml:"visibility_timeout"`
-	AttributeNames         []string                     `toml:"attribute_names"`
-	MessageAttributeNames  []string                     `toml:"message_attribute_names"`
-	ReceiptHandle          string                       `toml:"receipt_handle"`
-	SourceARN              string                       `toml:"source_arn"`
-	DestinationARN         string                       `toml:"destination_arn"`
-	MaxMessagesPerSecond   int32                        `toml:"max_messages_per_second"`
-	MessageAttributes      map[string]SQSMessageAttrVal `toml:"message_attributes"`
-}
-
-type SQSMessageAttrVal struct {
-	DataType    string `toml:"DataType"`
-	StringValue string `toml:"StringValue"`
-	BinaryValue []byte `toml:"BinaryValue"`
-}
-
 func runSQSAction(cfg aws.Config, content []byte, payload []byte) (interface{}, error) {
-	var action SQSAction
+	var action baseTypes.SQSAction
 	if err := parser.Unmarshal(content, &action); err != nil {
 		return nil, fmt.Errorf("failed to parse sqs action: %w", err)
 	}
@@ -77,7 +47,7 @@ func runSQSAction(cfg aws.Config, content []byte, payload []byte) (interface{}, 
 }
 
 // runSQSSend handles sqs.send_message
-func runSQSSend(ctx context.Context, client *sqs.Client, action SQSAction, payload []byte) (interface{}, error) {
+func runSQSSend(ctx context.Context, client *sqs.Client, action baseTypes.SQSAction, payload []byte) (interface{}, error) {
 	body := string(payload)
 
 	input := &sqs.SendMessageInput{
@@ -125,7 +95,7 @@ func runSQSSend(ctx context.Context, client *sqs.Client, action SQSAction, paylo
 }
 
 // runSQSReceive handles sqs.receive_message
-func runSQSReceive(ctx context.Context, client *sqs.Client, action SQSAction) (interface{}, error) {
+func runSQSReceive(ctx context.Context, client *sqs.Client, action baseTypes.SQSAction) (interface{}, error) {
 
 	input := &sqs.ReceiveMessageInput{
 		QueueUrl: aws.String(action.SQS.QueueURL),
@@ -197,7 +167,7 @@ func runSQSReceive(ctx context.Context, client *sqs.Client, action SQSAction) (i
 }
 
 // runSQSDelete handles sqs.delete_message
-func runSQSDelete(ctx context.Context, client *sqs.Client, action SQSAction) (interface{}, error) {
+func runSQSDelete(ctx context.Context, client *sqs.Client, action baseTypes.SQSAction) (interface{}, error) {
 	var _, err = client.DeleteMessage(ctx, &sqs.DeleteMessageInput{
 		QueueUrl:      aws.String(action.SQS.QueueURL),
 		ReceiptHandle: aws.String(action.SQS.ReceiptHandle),
@@ -210,7 +180,7 @@ func runSQSDelete(ctx context.Context, client *sqs.Client, action SQSAction) (in
 }
 
 // runSQSPurge handles sqs.purge_queue
-func runSQSPurge(ctx context.Context, client *sqs.Client, action SQSAction) (interface{}, error) {
+func runSQSPurge(ctx context.Context, client *sqs.Client, action baseTypes.SQSAction) (interface{}, error) {
 	var _, err = client.PurgeQueue(ctx, &sqs.PurgeQueueInput{
 		QueueUrl: aws.String(action.SQS.QueueURL),
 	})
@@ -222,7 +192,7 @@ func runSQSPurge(ctx context.Context, client *sqs.Client, action SQSAction) (int
 }
 
 // runSQSMoveTask handles sqs.start_message_move_task
-func runSQSMoveTask(ctx context.Context, client *sqs.Client, action SQSAction) (interface{}, error) {
+func runSQSMoveTask(ctx context.Context, client *sqs.Client, action baseTypes.SQSAction) (interface{}, error) {
 	input := &sqs.StartMessageMoveTaskInput{
 		SourceArn: aws.String(action.SQS.SourceARN),
 	}

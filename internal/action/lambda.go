@@ -15,36 +15,8 @@ import (
 	baseTypes "github.com/jpalaniselvam/myna/internal/types"
 )
 
-// LambdaAction represents the structure of a lambda.invoke action TOML file
-type LambdaAction struct {
-	baseTypes.BaseAction
-	Lambda LambdaConfig `toml:"lambda"`
-}
-
-// LambdaConfig defines the lambda function configuration
-type LambdaConfig struct {
-	FunctionName   string                 `toml:"function_name"`
-	InvocationType string                 `toml:"invocation_type"` // RequestResponse (default), Event, DryRun
-	Qualifier      string                 `toml:"qualifier"`
-	ClientContext  map[string]interface{} `toml:"client_context"`
-}
-
-// LambdaOutput represents the output of a lambda execution
-type LambdaOutput struct {
-	StatusCode      int                    `json:"status_code"`
-	ExecutedVersion string                 `json:"executed_version"`
-	Payload         map[string]interface{} `json:"payload"`
-	Logs            string                 `json:"logs,omitempty"`
-	RawPayload      []byte                 `json:"-"` // Internal use, for when response is not JSON
-}
-
-func (l *LambdaOutput) String() string {
-	b, _ := json.MarshalIndent(l, "", "  ")
-	return string(b)
-}
-
 func runLambdaAction(cfg aws.Config, content []byte, payload []byte) (interface{}, error) {
-	var action LambdaAction
+	var action baseTypes.LambdaAction
 	if err := parser.Unmarshal(content, &action); err != nil {
 		return nil, fmt.Errorf("failed to parse lambda action: %w", err)
 	}
@@ -76,7 +48,7 @@ func runLambdaAction(cfg aws.Config, content []byte, payload []byte) (interface{
 	return output, nil
 }
 
-func buildInvokeInput(action LambdaAction, payload []byte) (*lambda.InvokeInput, error) {
+func buildInvokeInput(action baseTypes.LambdaAction, payload []byte) (*lambda.InvokeInput, error) {
 
 	var invocationType = types.InvocationType(action.Lambda.InvocationType)
 
@@ -107,8 +79,8 @@ func buildInvokeInput(action LambdaAction, payload []byte) (*lambda.InvokeInput,
 	return input, nil
 }
 
-func processLambdaOutput(resp *lambda.InvokeOutput) (*LambdaOutput, error) {
-	output := &LambdaOutput{
+func processLambdaOutput(resp *lambda.InvokeOutput) (*baseTypes.LambdaOutput, error) {
+	output := &baseTypes.LambdaOutput{
 		StatusCode:      int(resp.StatusCode),
 		ExecutedVersion: aws.ToString(resp.ExecutedVersion),
 		RawPayload:      resp.Payload,

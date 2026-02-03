@@ -13,22 +13,8 @@ import (
 	baseTypes "github.com/jpalaniselvam/myna/internal/types"
 )
 
-// RDSAction represents the structure of an RDS action TOML file
-type RDSAction struct {
-	baseTypes.BaseAction
-	RDS RDSConfig `toml:"rds"`
-}
-
-// RDSConfig defines the RDS configuration parameters
-type RDSConfig struct {
-	DBInstanceIdentifier string              `toml:"db_instance_identifier"`
-	Filters              map[string][]string `toml:"filters"`
-	DBSnapshotIdentifier string              `toml:"db_snapshot_identifier"`
-	ForceFailover        bool                `toml:"force_failover"`
-}
-
 func runRDSAction(cfg aws.Config, content []byte) (interface{}, error) {
-	var action RDSAction
+	var action baseTypes.RDSAction
 	if err := parser.Unmarshal(content, &action); err != nil {
 		return nil, fmt.Errorf("failed to parse rds action: %w", err)
 	}
@@ -50,7 +36,7 @@ func runRDSAction(cfg aws.Config, content []byte) (interface{}, error) {
 	}
 }
 
-func runRDSDescribeInstances(ctx context.Context, client *rds.Client, action RDSAction) (interface{}, error) {
+func runRDSDescribeInstances(ctx context.Context, client *rds.Client, action baseTypes.RDSAction) (interface{}, error) {
 	input := &rds.DescribeDBInstancesInput{}
 
 	if action.RDS.DBInstanceIdentifier != "" {
@@ -87,7 +73,7 @@ func runRDSDescribeInstances(ctx context.Context, client *rds.Client, action RDS
 	}, nil
 }
 
-func runRDSStartInstance(ctx context.Context, client *rds.Client, action RDSAction) (interface{}, error) {
+func runRDSStartInstance(ctx context.Context, client *rds.Client, action baseTypes.RDSAction) (interface{}, error) {
 	input := &rds.StartDBInstanceInput{
 		DBInstanceIdentifier: aws.String(action.RDS.DBInstanceIdentifier),
 	}
@@ -100,7 +86,7 @@ func runRDSStartInstance(ctx context.Context, client *rds.Client, action RDSActi
 	return simplifyDBInstance(*resp.DBInstance), nil
 }
 
-func runRDSStopInstance(ctx context.Context, client *rds.Client, action RDSAction) (interface{}, error) {
+func runRDSStopInstance(ctx context.Context, client *rds.Client, action baseTypes.RDSAction) (interface{}, error) {
 	input := &rds.StopDBInstanceInput{
 		DBInstanceIdentifier: aws.String(action.RDS.DBInstanceIdentifier),
 	}
@@ -117,7 +103,7 @@ func runRDSStopInstance(ctx context.Context, client *rds.Client, action RDSActio
 	return simplifyDBInstance(*resp.DBInstance), nil
 }
 
-func runRDSRebootInstance(ctx context.Context, client *rds.Client, action RDSAction) (interface{}, error) {
+func runRDSRebootInstance(ctx context.Context, client *rds.Client, action baseTypes.RDSAction) (interface{}, error) {
 	input := &rds.RebootDBInstanceInput{
 		DBInstanceIdentifier: aws.String(action.RDS.DBInstanceIdentifier),
 	}

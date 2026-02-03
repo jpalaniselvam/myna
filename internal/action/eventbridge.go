@@ -2,7 +2,6 @@ package action
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"time"
 
@@ -14,40 +13,8 @@ import (
 	baseTypes "github.com/jpalaniselvam/myna/internal/types"
 )
 
-// EventBridgeAction represents the structure of an eventbridge.put_events action TOML file
-type EventBridgeAction struct {
-	baseTypes.BaseAction
-	EventBridge EventBridgeConfig `toml:"eventbridge"`
-}
-
-// EventBridgeConfig defines the EventBridge specific configuration
-type EventBridgeConfig struct {
-	BusName     string   `toml:"bus_name"`
-	Source      string   `toml:"source"`
-	DetailType  string   `toml:"detail_type"`
-	Resources   []string `toml:"resources"`
-	TraceHeader string   `toml:"trace_header"`
-}
-
-// EventBridgeOutput represents the output of an EventBridge put_events execution
-type EventBridgeOutput struct {
-	FailedEntryCount int32                    `json:"FailedEntryCount"`
-	Entries          []EventBridgeEntryOutput `json:"Entries"`
-}
-
-type EventBridgeEntryOutput struct {
-	EventId      *string `json:"EventId"`
-	ErrorCode    *string `json:"ErrorCode,omitempty"`
-	ErrorMessage *string `json:"ErrorMessage,omitempty"`
-}
-
-func (e *EventBridgeOutput) String() string {
-	b, _ := json.MarshalIndent(e, "", "  ")
-	return string(b)
-}
-
 func runEventBridgeAction(cfg aws.Config, content []byte, payload []byte) (interface{}, error) {
-	var action EventBridgeAction
+	var action baseTypes.EventBridgeAction
 	if err := parser.Unmarshal(content, &action); err != nil {
 		return nil, fmt.Errorf("failed to parse eventbridge action: %w", err)
 	}
@@ -75,7 +42,7 @@ func runEventBridgeAction(cfg aws.Config, content []byte, payload []byte) (inter
 	return output, nil
 }
 
-func buildPutEventsInput(action EventBridgeAction, payload []byte) (*eventbridge.PutEventsInput, error) {
+func buildPutEventsInput(action baseTypes.EventBridgeAction, payload []byte) (*eventbridge.PutEventsInput, error) {
 	var detail string
 	if payload != nil {
 		detail = string(payload)
@@ -107,14 +74,14 @@ func buildPutEventsInput(action EventBridgeAction, payload []byte) (*eventbridge
 	}, nil
 }
 
-func processEventBridgeOutput(resp *eventbridge.PutEventsOutput) *EventBridgeOutput {
-	output := &EventBridgeOutput{
+func processEventBridgeOutput(resp *eventbridge.PutEventsOutput) *baseTypes.EventBridgeOutput {
+	output := &baseTypes.EventBridgeOutput{
 		FailedEntryCount: resp.FailedEntryCount,
-		Entries:          make([]EventBridgeEntryOutput, len(resp.Entries)),
+		Entries:          make([]baseTypes.EventBridgeEntryOutput, len(resp.Entries)),
 	}
 
 	for i, entry := range resp.Entries {
-		output.Entries[i] = EventBridgeEntryOutput{
+		output.Entries[i] = baseTypes.EventBridgeEntryOutput{
 			EventId:      entry.EventId,
 			ErrorCode:    entry.ErrorCode,
 			ErrorMessage: entry.ErrorMessage,
