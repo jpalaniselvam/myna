@@ -72,3 +72,18 @@ func (a *App) DeleteEnvVar(collectionPath, envName, key string) error {
 func (a *App) CreateAction(input collection.CreateActionInput) error {
 	return collection.CreateAction(input)
 }
+
+// UpdateAction updates an existing action within a collection
+func (a *App) UpdateAction(input collection.UpdateActionInput) error {
+	return collection.UpdateAction(input)
+}
+
+// DeleteAction deletes an action from a collection
+func (a *App) DeleteAction(input collection.GetActionInput) error {
+	return collection.DeleteAction(input)
+}
+
+// GetAction retrieves an action from a collection
+func (a *App) GetAction(input collection.GetActionInput) (interface{}, error) {
+	return collection.GetAction(input)
+}
