@@ -12,23 +12,8 @@ import (
 	baseTypes "github.com/jpalaniselvam/myna/internal/types"
 )
 
-// EC2Action represents the structure of an EC2 action TOML file
-type EC2Action struct {
-	baseTypes.BaseAction
-	EC2 EC2Config `toml:"ec2"`
-}
-
-// EC2Config defines the EC2 configuration parameters
-type EC2Config struct {
-	InstanceIds []string            `toml:"instance_ids"`
-	Filters     map[string][]string `toml:"filters"`
-	Hibernate   bool                `toml:"hibernate"`
-	Force       bool                `toml:"force"`
-	DryRun      bool                `toml:"dry_run"`
-}
-
 func runEC2Action(cfg aws.Config, content []byte) (interface{}, error) {
-	var action EC2Action
+	var action baseTypes.EC2Action
 	if err := parser.Unmarshal(content, &action); err != nil {
 		return nil, fmt.Errorf("failed to parse ec2 action: %w", err)
 	}
@@ -61,7 +46,7 @@ func runEC2Action(cfg aws.Config, content []byte) (interface{}, error) {
 	return output, nil
 }
 
-func runEC2DescribeInstances(ctx context.Context, client *ec2.Client, action EC2Action) (interface{}, error) {
+func runEC2DescribeInstances(ctx context.Context, client *ec2.Client, action baseTypes.EC2Action) (interface{}, error) {
 	input := &ec2.DescribeInstancesInput{}
 
 	if len(action.EC2.InstanceIds) > 0 {
@@ -125,7 +110,7 @@ func runEC2DescribeInstances(ctx context.Context, client *ec2.Client, action EC2
 	}, nil
 }
 
-func runEC2StartInstances(ctx context.Context, client *ec2.Client, action EC2Action) (interface{}, error) {
+func runEC2StartInstances(ctx context.Context, client *ec2.Client, action baseTypes.EC2Action) (interface{}, error) {
 	if len(action.EC2.InstanceIds) == 0 {
 		return nil, fmt.Errorf("instance_ids is required for start_instances")
 	}
@@ -148,7 +133,7 @@ func runEC2StartInstances(ctx context.Context, client *ec2.Client, action EC2Act
 	}, nil
 }
 
-func runEC2StopInstances(ctx context.Context, client *ec2.Client, action EC2Action) (interface{}, error) {
+func runEC2StopInstances(ctx context.Context, client *ec2.Client, action baseTypes.EC2Action) (interface{}, error) {
 	if len(action.EC2.InstanceIds) == 0 {
 		return nil, fmt.Errorf("instance_ids is required for stop_instances")
 	}
@@ -177,7 +162,7 @@ func runEC2StopInstances(ctx context.Context, client *ec2.Client, action EC2Acti
 	}, nil
 }
 
-func runEC2RebootInstances(ctx context.Context, client *ec2.Client, action EC2Action) (interface{}, error) {
+func runEC2RebootInstances(ctx context.Context, client *ec2.Client, action baseTypes.EC2Action) (interface{}, error) {
 	if len(action.EC2.InstanceIds) == 0 {
 		return nil, fmt.Errorf("instance_ids is required for reboot_instances")
 	}
@@ -198,7 +183,7 @@ func runEC2RebootInstances(ctx context.Context, client *ec2.Client, action EC2Ac
 	return map[string]string{"status": "success"}, nil
 }
 
-func runEC2TerminateInstances(ctx context.Context, client *ec2.Client, action EC2Action) (interface{}, error) {
+func runEC2TerminateInstances(ctx context.Context, client *ec2.Client, action baseTypes.EC2Action) (interface{}, error) {
 	if len(action.EC2.InstanceIds) == 0 {
 		return nil, fmt.Errorf("instance_ids is required for terminate_instances")
 	}

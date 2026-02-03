@@ -11,23 +11,8 @@ import (
 	baseTypes "github.com/jpalaniselvam/myna/internal/types"
 )
 
-// SFNAction represents the structure of a Step Functions action TOML file
-type SFNAction struct {
-	baseTypes.BaseAction
-	SFN SFNConfig `toml:"sfn"`
-}
-
-// SFNConfig defines the Step Functions configuration parameters
-type SFNConfig struct {
-	StateMachineARN string `toml:"state_machine_arn"`
-	Name            string `toml:"name"`
-	ExecutionARN    string `toml:"execution_arn"`
-	Error           string `toml:"error"`
-	Cause           string `toml:"cause"`
-}
-
 func runSFNAction(cfg aws.Config, content []byte, payload []byte) (interface{}, error) {
-	var action SFNAction
+	var action baseTypes.SFNAction
 	if err := parser.Unmarshal(content, &action); err != nil {
 		return nil, fmt.Errorf("failed to parse sfn action: %w", err)
 	}
@@ -90,7 +75,7 @@ func runSFNListStateMachines(ctx context.Context, client *sfn.Client) (interface
 }
 
 // runSFNStartExecution handles sfn.start_execution
-func runSFNStartExecution(ctx context.Context, client *sfn.Client, action SFNAction, payload []byte) (interface{}, error) {
+func runSFNStartExecution(ctx context.Context, client *sfn.Client, action baseTypes.SFNAction, payload []byte) (interface{}, error) {
 	input := &sfn.StartExecutionInput{
 		StateMachineArn: aws.String(action.SFN.StateMachineARN),
 	}
@@ -115,7 +100,7 @@ func runSFNStartExecution(ctx context.Context, client *sfn.Client, action SFNAct
 }
 
 // runSFNDescribeExecution handles sfn.describe_execution
-func runSFNDescribeExecution(ctx context.Context, client *sfn.Client, action SFNAction) (interface{}, error) {
+func runSFNDescribeExecution(ctx context.Context, client *sfn.Client, action baseTypes.SFNAction) (interface{}, error) {
 	input := &sfn.DescribeExecutionInput{
 		ExecutionArn: aws.String(action.SFN.ExecutionARN),
 	}
@@ -153,7 +138,7 @@ func runSFNDescribeExecution(ctx context.Context, client *sfn.Client, action SFN
 }
 
 // runSFNStopExecution handles sfn.stop_execution
-func runSFNStopExecution(ctx context.Context, client *sfn.Client, action SFNAction) (interface{}, error) {
+func runSFNStopExecution(ctx context.Context, client *sfn.Client, action baseTypes.SFNAction) (interface{}, error) {
 	input := &sfn.StopExecutionInput{
 		ExecutionArn: aws.String(action.SFN.ExecutionARN),
 	}

@@ -2,7 +2,6 @@ package action
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -13,44 +12,8 @@ import (
 	baseTypes "github.com/jpalaniselvam/myna/internal/types"
 )
 
-// SNSAction represents the structure of an sns.publish action TOML file
-type SNSAction struct {
-	baseTypes.BaseAction
-	SNS SNSConfig `toml:"sns"`
-}
-
-// SNSConfig defines the SNS publication configuration
-type SNSConfig struct {
-	TopicARN               string                         `toml:"topic_arn"`
-	TargetARN              string                         `toml:"target_arn"`
-	PhoneNumber            string                         `toml:"phone_number"`
-	Subject                string                         `toml:"subject"`
-	MessageStructure       string                         `toml:"message_structure"`
-	MessageGroupID         string                         `toml:"message_group_id"`
-	MessageDeduplicationID string                         `toml:"message_deduplication_id"`
-	MessageAttributes      map[string]SNSMessageAttribute `toml:"message_attributes"`
-}
-
-// SNSMessageAttribute defines a single message attribute
-type SNSMessageAttribute struct {
-	DataType    string `toml:"DataType"`
-	StringValue string `toml:"StringValue"`
-	BinaryValue []byte `toml:"BinaryValue"`
-}
-
-// SNSOutput represents the output of an SNS publish execution
-type SNSOutput struct {
-	MessageID      string `json:"message_id"`
-	SequenceNumber string `json:"sequence_number,omitempty"`
-}
-
-func (s *SNSOutput) String() string {
-	b, _ := json.MarshalIndent(s, "", "  ")
-	return string(b)
-}
-
 func runSNSAction(cfg aws.Config, content []byte, payload []byte) (interface{}, error) {
-	var action SNSAction
+	var action baseTypes.SNSAction
 	if err := parser.Unmarshal(content, &action); err != nil {
 		return nil, fmt.Errorf("failed to parse sns action: %w", err)
 	}
@@ -68,7 +31,7 @@ func runSNSAction(cfg aws.Config, content []byte, payload []byte) (interface{}, 
 		return nil, fmt.Errorf("failed to publish to sns: %w", err)
 	}
 
-	output := &SNSOutput{
+	output := &baseTypes.SNSOutput{
 		MessageID:      aws.ToString(resp.MessageId),
 		SequenceNumber: aws.ToString(resp.SequenceNumber),
 	}
@@ -76,7 +39,7 @@ func runSNSAction(cfg aws.Config, content []byte, payload []byte) (interface{}, 
 	return output, nil
 }
 
-func buildPublishInput(action SNSAction, payload []byte) (*sns.PublishInput, error) {
+func buildPublishInput(action baseTypes.SNSAction, payload []byte) (*sns.PublishInput, error) {
 	message := string(payload)
 
 	input := &sns.PublishInput{

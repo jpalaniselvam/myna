@@ -12,24 +12,8 @@ import (
 	baseTypes "github.com/jpalaniselvam/myna/internal/types"
 )
 
-type SESAction struct {
-	baseTypes.BaseAction
-	SES SESConfig `toml:"ses"`
-}
-
-type SESConfig struct {
-	Source       string   `toml:"source"`
-	ToAddresses  []string `toml:"to_addresses"`
-	CcAddresses  []string `toml:"cc_addresses"`
-	BccAddresses []string `toml:"bcc_addresses"`
-	Subject      string   `toml:"subject"`
-	HtmlBody     string   `toml:"html_body"`
-	TextBody     string   `toml:"text_body"`
-	EmailAddress string   `toml:"email_address"`
-}
-
 func runSESAction(cfg aws.Config, content []byte, payload []byte) (interface{}, error) {
-	var action SESAction
+	var action baseTypes.SESAction
 	if err := parser.Unmarshal(content, &action); err != nil {
 		return nil, fmt.Errorf("failed to parse ses action: %w", err)
 	}
@@ -47,7 +31,7 @@ func runSESAction(cfg aws.Config, content []byte, payload []byte) (interface{}, 
 	}
 }
 
-func runSESSendEmail(ctx context.Context, client *ses.Client, action SESAction, payload []byte) (interface{}, error) {
+func runSESSendEmail(ctx context.Context, client *ses.Client, action baseTypes.SESAction, payload []byte) (interface{}, error) {
 	if action.SES.Source == "" {
 		return nil, fmt.Errorf("source is required")
 	}
@@ -103,7 +87,7 @@ func runSESSendEmail(ctx context.Context, client *ses.Client, action SESAction, 
 	}, nil
 }
 
-func runSESVerifyEmailIdentity(ctx context.Context, client *ses.Client, action SESAction) (interface{}, error) {
+func runSESVerifyEmailIdentity(ctx context.Context, client *ses.Client, action baseTypes.SESAction) (interface{}, error) {
 	if action.SES.EmailAddress == "" {
 		return nil, fmt.Errorf("email_address is required")
 	}

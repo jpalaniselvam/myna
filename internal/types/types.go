@@ -38,30 +38,30 @@ const (
 
 // Metadata contains common fields for all actions
 type Metadata struct {
-	Version     string `toml:"version"`
-	Kind        Kind   `toml:"kind"`
-	Description string `toml:"description"`
-	Region      string `toml:"region,omitempty"`
-	Profile     string `toml:"profile,omitempty"`
-	RoleARN     string `toml:"role_arn,omitempty"`
-	TimeoutMs   int    `toml:"timeout_ms,omitempty"`
+	Version     string `toml:"version" json:"version"`
+	Kind        Kind   `toml:"kind" json:"kind"`
+	Description string `toml:"description" json:"description"`
+	Region      string `toml:"region,omitempty" json:"region,omitempty"`
+	Profile     string `toml:"profile,omitempty" json:"profile,omitempty"`
+	RoleARN     string `toml:"role_arn,omitempty" json:"role_arn,omitempty"`
+	TimeoutMs   int    `toml:"timeout_ms,omitempty" json:"timeout_ms,omitempty"`
 }
 
 // Vars contains pre. no support for post as of now
 type Vars struct {
-	Pre map[string]interface{} `toml:"pre"`
+	Pre map[string]interface{} `toml:"pre" json:"pre"`
 }
 
 type Payload struct {
-	Data string `toml:"data,omitempty"`
-	File string `toml:"file,omitempty"`
+	Data string `toml:"data,omitempty" json:"data,omitempty"`
+	File string `toml:"file,omitempty" json:"file,omitempty"`
 }
 
 // BaseAction combines Metadata and ActionVariables for initial parsing
 type BaseAction struct {
 	Metadata
 	Vars
-	Payload Payload `toml:"payload"`
+	Payload Payload `toml:"payload" json:"payload"`
 }
 
 type Collection struct {
