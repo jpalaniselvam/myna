@@ -18,6 +18,10 @@ export function CreateEnvironment(arg1, arg2) {
   return window['go']['main']['App']['CreateEnvironment'](arg1, arg2);
 }
 
+export function DeleteAction(arg1) {
+  return window['go']['main']['App']['DeleteAction'](arg1);
+}
+
 export function DeleteCollection(arg1) {
   return window['go']['main']['App']['DeleteCollection'](arg1);
 }
@@ -26,12 +30,28 @@ export function DeleteEnvVar(arg1, arg2, arg3) {
   return window['go']['main']['App']['DeleteEnvVar'](arg1, arg2, arg3);
 }
 
+export function GetAction(arg1) {
+  return window['go']['main']['App']['GetAction'](arg1);
+}
+
 export function GetCollection(arg1) {
   return window['go']['main']['App']['GetCollection'](arg1);
 }
 
+export function GetEnvironment(arg1, arg2) {
+  return window['go']['main']['App']['GetEnvironment'](arg1, arg2);
+}
+
 export function Greet(arg1) {
   return window['go']['main']['App']['Greet'](arg1);
+}
+
+export function SelectDirectory() {
+  return window['go']['main']['App']['SelectDirectory']();
+}
+
+export function UpdateAction(arg1) {
+  return window['go']['main']['App']['UpdateAction'](arg1);
 }
 
 export function UpdateCollection(arg1, arg2, arg3, arg4) {
