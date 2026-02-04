@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/jpalaniselvam/myna/internal/collection"
+	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
 // App struct
@@ -58,6 +59,11 @@ func (a *App) AddEnvVar(collectionPath, envName, key, value string) error {
 	return collection.AddEnvVar(collectionPath, envName, key, value)
 }
 
+// GetEnvironment retrieves the variables of an environment
+func (a *App) GetEnvironment(collectionPath, envName string) (map[string]interface{}, error) {
+	return collection.GetEnvironment(collectionPath, envName)
+}
+
 // UpdateEnvVar updates a key-value pair in an environment
 func (a *App) UpdateEnvVar(collectionPath, envName, key, value string) error {
 	return collection.UpdateEnvVar(collectionPath, envName, key, value)
@@ -86,4 +92,11 @@ func (a *App) DeleteAction(input collection.GetActionInput) error {
 // GetAction retrieves an action from a collection
 func (a *App) GetAction(input collection.GetActionInput) (interface{}, error) {
 	return collection.GetAction(input)
+}
+
+// SelectDirectory opens a directory selection dialog
+func (a *App) SelectDirectory() (string, error) {
+	return runtime.OpenDirectoryDialog(a.ctx, runtime.OpenDialogOptions{
+		Title: "Select Collection Directory",
+	})
 }

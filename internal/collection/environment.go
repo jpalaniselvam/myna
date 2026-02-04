@@ -29,9 +29,32 @@ func CreateEnvironment(collectionPath, envName string) error {
 	if err != nil {
 		return fmt.Errorf("failed to create environment file: %w", err)
 	}
-	defer f.Close()
-
+	f.Close()
 	return nil
+}
+
+// GetEnvironment retrieves the variables of an environment
+func GetEnvironment(collectionPath, envName string) (map[string]interface{}, error) {
+	if collectionPath == "" || envName == "" {
+		return nil, fmt.Errorf("collection path and environment name are required")
+	}
+
+	envFilePath := filepath.Join(collectionPath, "environments", envName+".toml")
+	data, err := os.ReadFile(envFilePath)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read environment file: %w", err)
+	}
+
+	var envMap map[string]interface{}
+	if len(data) > 0 {
+		if err := toml.Unmarshal(data, &envMap); err != nil {
+			return nil, fmt.Errorf("failed to parse environment file: %w", err)
+		}
+	} else {
+		envMap = make(map[string]interface{})
+	}
+
+	return envMap, nil
 }
 
 // AddEnvVar adds a key-value pair to an environment. Errors if key already exists.

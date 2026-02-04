@@ -10,13 +10,23 @@ export function CreateCollection(arg1:string,arg2:string,arg3:string):Promise<vo
 
 export function CreateEnvironment(arg1:string,arg2:string):Promise<void>;
 
+export function DeleteAction(arg1:collection.GetActionInput):Promise<void>;
+
 export function DeleteCollection(arg1:string):Promise<void>;
 
 export function DeleteEnvVar(arg1:string,arg2:string,arg3:string):Promise<void>;
 
+export function GetAction(arg1:collection.GetActionInput):Promise<any>;
+
 export function GetCollection(arg1:string):Promise<collection.CollectionResponse>;
 
+export function GetEnvironment(arg1:string,arg2:string):Promise<Record<string, any>>;
+
 export function Greet(arg1:string):Promise<string>;
+
+export function SelectDirectory():Promise<string>;
+
+export function UpdateAction(arg1:collection.UpdateActionInput):Promise<void>;
 
 export function UpdateCollection(arg1:string,arg2:string,arg3:string,arg4:Record<string, any>):Promise<void>;
 

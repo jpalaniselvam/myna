@@ -12,6 +12,7 @@ import (
 
 // CollectionResponse is the structure returned by Get
 type CollectionResponse struct {
+	Description  string                 `json:"description"`
 	Environments []string               `json:"environments"`
 	Pre          map[string]interface{} `json:"pre"`
 	Actions      map[string]interface{} `json:"actions"`
@@ -151,6 +152,7 @@ func Get(collectionPath string) (*CollectionResponse, error) {
 	}
 
 	response := &CollectionResponse{
+		Description:  coll.Metadata.Description,
 		Pre:          coll.Vars.Pre,
 		Environments: []string{},
 		Actions:      make(map[string]interface{}),
