@@ -9,7 +9,7 @@
 	}>();
 
 	let editing = $state(false);
-	let editValue = $state(description);
+	let editValue = $state('');
 	let error = $state('');
 	let loading = $state(false);
 
