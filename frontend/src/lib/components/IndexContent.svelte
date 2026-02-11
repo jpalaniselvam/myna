@@ -1,25 +1,50 @@
 <script lang="ts">
-	/**
-	 * Myna - The Postman for AWS serverless.
-	 *
-	 * Project Details:
-	 * - Name: Myna
-	 * - Description: Bridges the gap between API-first tools and modern serverless systems by providing
-	 *   Git-first workflows, repeatable execution, and a unified interface for Lambda, S3, SQS, SNS, and EventBridge.
-	 */
+	import { collectionStore } from '$lib/stores/collections.svelte';
+	import { CreateCollection } from '../../../wailsjs/go/main/App';
+	import ErrorBanner from './sidebar/ErrorBanner.svelte';
+	import CreateCollectionDialog from '$lib/components/dialogs/CreateCollectionDialog.svelte';
+
+	let showCreateDialog = $state(false);
+	let error = $state('');
 
 	function handleAddCollection() {
-		console.log('Add collections handler triggered');
+		showCreateDialog = true;
 	}
 
 	function handleOpenCollection() {
 		console.log('Open collection handler triggered');
 	}
+
+	async function onCreateSubmit(data: { name: string; baseDir: string }) {
+		try {
+			error = '';
+			await CreateCollection(data.baseDir, data.name, '');
+
+			// Success
+			const separator = data.baseDir.includes('\\') ? '\\' : '/';
+			const cleanBase = data.baseDir.endsWith(separator) ? data.baseDir.slice(0, -1) : data.baseDir;
+			const fullPath = `${cleanBase}${separator}${data.name}`;
+
+			collectionStore.add(fullPath);
+			collectionStore.setActive(fullPath);
+			showCreateDialog = false;
+		} catch (e: any) {
+			error = e.toString() || 'Failed to create collection';
+			console.error(error);
+		}
+	}
 </script>
+
+<CreateCollectionDialog bind:open={showCreateDialog} onsubmit={onCreateSubmit} />
 
 <div
 	class="mx-auto flex max-w-3xl flex-col items-center justify-center space-y-12 px-4 py-16 text-center"
 >
+	{#if error}
+		<div class="fixed top-4 right-4 z-50 w-full max-w-xs transition-all">
+			<ErrorBanner message={error} ondismiss={() => (error = '')} />
+		</div>
+	{/if}
 	<!-- Hero Section -->
 	<header class="space-y-6">
 		<h1 class="h1 text-5xl font-bold text-primary-500 md:text-6xl">Myna</h1>

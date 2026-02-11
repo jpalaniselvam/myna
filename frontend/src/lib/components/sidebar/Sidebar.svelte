@@ -1,92 +1,58 @@
 <script lang="ts">
 	import { collectionStore } from '$lib/stores/collections.svelte';
-	import { CreateCollection, SelectDirectory } from '../../../../wailsjs/go/main/App';
 	import SidebarHeader from './SidebarHeader.svelte';
 	import SidebarList from './SidebarList.svelte';
+	import CreateCollectionDialog from '$lib/components/dialogs/CreateCollectionDialog.svelte';
+	import { CreateCollection } from '../../../../wailsjs/go/main/App';
 	import ErrorBanner from './ErrorBanner.svelte';
 
-	let creating = $state(false);
+	let showCreateDialog = $state(false);
 	let error = $state('');
-	let picking = false;
-
-	function handleStartCreation() {
-		creating = true;
-		error = '';
-	}
-
-	function handleCancelCreation() {
-		if (picking) return;
-		creating = false;
-		error = '';
-	}
-
-	async function handleNameSubmit(name: string) {
-		error = '';
-		// Validation
-		if (!name) {
-			error = 'Name cannot be empty';
-			return;
-		}
-		if (/[<>:"/\\|?*]/.test(name)) {
-			error = 'Name contains invalid characters';
-			return;
-		}
-
-		// Step 2: Location Selection
-		try {
-			picking = true;
-			const baseDir = await SelectDirectory();
-			picking = false;
-
-			if (!baseDir) {
-				// Return to input
-				return;
-			}
-
-			// Step 3: Creation
-			await CreateCollection(baseDir, name, '');
-
-			// Success
-			const separator = baseDir.includes('\\') ? '\\' : '/';
-			const cleanBase = baseDir.endsWith(separator) ? baseDir.slice(0, -1) : baseDir;
-			const fullPath = `${cleanBase}${separator}${name}`;
-
-			collectionStore.add(fullPath);
-			collectionStore.setActive(fullPath);
-
-			// Success -> Idle
-			creating = false;
-			error = '';
-		} catch (e: any) {
-			picking = false;
-			error = e.toString() || 'Failed to create collection';
-		}
-	}
 
 	function handleSelectCollection(path: string) {
 		collectionStore.setActive(path);
+	}
+
+	function handleAddCollection() {
+		showCreateDialog = true;
+	}
+
+	async function onCreateSubmit(data: { name: string; baseDir: string }) {
+		try {
+			error = '';
+			await CreateCollection(data.baseDir, data.name, '');
+
+			// Success
+			const separator = data.baseDir.includes('\\') ? '\\' : '/';
+			const cleanBase = data.baseDir.endsWith(separator) ? data.baseDir.slice(0, -1) : data.baseDir;
+			const fullPath = `${cleanBase}${separator}${data.name}`;
+
+			collectionStore.add(fullPath);
+			collectionStore.setActive(fullPath);
+			showCreateDialog = false;
+		} catch (e: any) {
+			error = e.toString() || 'Failed to create collection';
+			console.error(error);
+		}
 	}
 </script>
 
 <aside class="bg-surface-50-900-token flex h-full w-64 flex-col border-r border-surface-500/30">
 	{#if error}
-		<div class="p-2">
+		<div class="fixed top-4 right-4 z-50 w-full max-w-xs transition-all">
 			<ErrorBanner message={error} ondismiss={() => (error = '')} />
 		</div>
 	{/if}
 
-	<SidebarHeader
-		{creating}
-		onstart={handleStartCreation}
-		onsubmit={handleNameSubmit}
-		oncancel={handleCancelCreation}
-	/>
+	<SidebarHeader onadd={handleAddCollection} />
 
-	<hr class="!border-t-2" />
+	<hr class="border-t-2!" />
 
 	<SidebarList
 		collections={collectionStore.collections}
 		activeCollection={collectionStore.activeCollection}
 		onselect={handleSelectCollection}
 	/>
+
+	<CreateCollectionDialog bind:open={showCreateDialog} onsubmit={onCreateSubmit} />
 </aside>
