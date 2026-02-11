@@ -30,7 +30,7 @@
 
 <div class="flex h-full flex-col overflow-hidden pt-2">
 	{#if workspaceStore.tabs.length > 0}
-		<Tabs value={workspaceStore.activeTabId || ''} onValueChange={handleValueChange} class="px-2">
+		<Tabs value={workspaceStore.activeTabId || ''} onValueChange={handleValueChange}>
 			<Tabs.List>
 				{#each workspaceStore.tabs as tab (tab.id)}
 					<Tabs.Trigger value={tab.id} class="flex w-64 items-center">
