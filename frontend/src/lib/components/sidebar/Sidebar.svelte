@@ -3,18 +3,45 @@
 	import SidebarHeader from './SidebarHeader.svelte';
 	import SidebarList from './SidebarList.svelte';
 	import CreateCollectionDialog from '$lib/components/dialogs/CreateCollectionDialog.svelte';
-	import { CreateCollection } from '../../../../wailsjs/go/main/App';
+	import {
+		CreateCollection,
+		SelectDirectory,
+		GetCollection
+	} from '../../../../wailsjs/go/main/App';
 	import ErrorBanner from './ErrorBanner.svelte';
+
+	import { workspaceStore } from '$lib/stores/workspace.svelte';
 
 	let showCreateDialog = $state(false);
 	let error = $state('');
 
 	function handleSelectCollection(path: string) {
+		const name = path.split(/[\\/]/).pop() || 'Collection';
+		workspaceStore.openTab('collection', path, name, { path });
 		collectionStore.setActive(path);
 	}
 
 	function handleAddCollection() {
 		showCreateDialog = true;
+	}
+
+	async function handleOpenCollection() {
+		try {
+			error = '';
+			const path = await SelectDirectory();
+			if (!path) return;
+
+			// Verify it's a valid collection
+			await GetCollection(path);
+
+			const name = path.split(/[\\/]/).pop() || 'Collection';
+			collectionStore.add(path);
+			workspaceStore.openTab('collection', path, name, { path });
+			collectionStore.setActive(path);
+		} catch (e: any) {
+			error = 'This directory does not appear to be a valid Myna collection.';
+			console.error(e);
+		}
 	}
 
 	async function onCreateSubmit(data: { name: string; baseDir: string }) {
@@ -28,6 +55,7 @@
 			const fullPath = `${cleanBase}${separator}${data.name}`;
 
 			collectionStore.add(fullPath);
+			workspaceStore.openTab('collection', fullPath, data.name, { path: fullPath });
 			collectionStore.setActive(fullPath);
 			showCreateDialog = false;
 		} catch (e: any) {
@@ -44,7 +72,7 @@
 		</div>
 	{/if}
 
-	<SidebarHeader onadd={handleAddCollection} />
+	<SidebarHeader onadd={handleAddCollection} onopen={handleOpenCollection} />
 
 	<hr class="border-t-2!" />
 

@@ -1,30 +1,44 @@
 
 
 
+
 export class CollectionStore {
     collections = $state<string[]>([]);
     activeCollection = $state<string | null>(null);
 
     constructor() { }
 
+    private normalize(path: string): string {
+        return path.replace(/\\/g, '/');
+    }
+
     add(path: string) {
-        if (!this.collections.includes(path)) {
+        const normalized = this.normalize(path);
+        if (!this.collections.some(c => this.normalize(c) === normalized)) {
             this.collections = [...this.collections, path];
         }
     }
 
     remove(path: string) {
-        this.collections = this.collections.filter(c => c !== path);
-        if (this.activeCollection === path) {
+        const normalized = this.normalize(path);
+        this.collections = this.collections.filter(c => this.normalize(c) !== normalized);
+        if (this.activeCollection && this.normalize(this.activeCollection) === normalized) {
             this.activeCollection = null;
         }
     }
 
-    setActive(path: string) {
-        if (this.collections.includes(path)) {
-            this.activeCollection = path;
+    setActive(path: string | null) {
+        if (!path) {
+            this.activeCollection = null;
+            return;
+        }
+        const normalized = this.normalize(path);
+        const match = this.collections.find(c => this.normalize(c) === normalized);
+        if (match) {
+            this.activeCollection = match;
         }
     }
 }
+
 
 export const collectionStore = new CollectionStore();
