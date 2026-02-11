@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { collectionStore } from '$lib/stores/collections.svelte';
-	import { CreateCollection } from '../../../wailsjs/go/main/App';
+	import { workspaceStore } from '$lib/stores/workspace.svelte';
+	import { CreateCollection, SelectDirectory, GetCollection } from '../../../wailsjs/go/main/App';
 	import ErrorBanner from './sidebar/ErrorBanner.svelte';
 	import CreateCollectionDialog from '$lib/components/dialogs/CreateCollectionDialog.svelte';
 
@@ -11,8 +12,23 @@
 		showCreateDialog = true;
 	}
 
-	function handleOpenCollection() {
-		console.log('Open collection handler triggered');
+	async function handleOpenCollection() {
+		try {
+			error = '';
+			const path = await SelectDirectory();
+			if (!path) return;
+
+			// Verify it's a valid collection
+			await GetCollection(path);
+
+			const name = path.split(/[\\/]/).pop() || 'Collection';
+			collectionStore.add(path);
+			workspaceStore.openTab('collection', path, name, { path });
+			collectionStore.setActive(path);
+		} catch (e: any) {
+			error = 'This directory does not appear to be a valid Myna collection.';
+			console.error(e);
+		}
 	}
 
 	async function onCreateSubmit(data: { name: string; baseDir: string }) {
@@ -26,6 +42,7 @@
 			const fullPath = `${cleanBase}${separator}${data.name}`;
 
 			collectionStore.add(fullPath);
+			workspaceStore.openTab('collection', fullPath, data.name, { path: fullPath });
 			collectionStore.setActive(fullPath);
 			showCreateDialog = false;
 		} catch (e: any) {

@@ -1,13 +1,7 @@
 <script>
-	import { collectionStore } from '$lib/stores/collections.svelte';
-	import CollectionWorkspace from '$lib/components/dashboard/CollectionWorkspace.svelte';
-	import IndexContent from '$lib/components/IndexContent.svelte';
+	import TabbedWorkspace from '$lib/components/TabbedWorkspace.svelte';
 </script>
 
 <div class="h-full w-full">
-	{#if collectionStore.activeCollection}
-		<CollectionWorkspace />
-	{:else}
-		<IndexContent />
-	{/if}
+	<TabbedWorkspace />
 </div>
