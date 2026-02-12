@@ -5,6 +5,7 @@
 	import EditableDescription from './EditableDescription.svelte';
 	import CollectionVariables from '$lib/components/dashboard/CollectionVariables.svelte';
 	import EnvironmentManager from '$lib/components/dashboard/EnvironmentManager.svelte';
+	import ActionList from '$lib/components/dashboard/ActionList.svelte';
 	import { Tabs } from '@skeletonlabs/skeleton-svelte';
 
 	let collectionData = $state<collection.CollectionResponse | null>(null);
@@ -57,17 +58,6 @@
 					<h2 class="truncate h2 font-bold text-primary-500" title={collectionName}>
 						{collectionName}
 					</h2>
-					{#if collectionData && collectionStore.activeCollection}
-						<div class="mt-1">
-							<EditableDescription
-								collectionPath={collectionStore.activeCollection}
-								description={collectionData.description || ''}
-								onupdate={(newDesc) => {
-									if (collectionData) collectionData.description = newDesc;
-								}}
-							/>
-						</div>
-					{/if}
 				</div>
 
 				<div class="flex shrink-0 items-center gap-4">
@@ -78,8 +68,24 @@
 			{#if collectionData}
 				<Tabs.List class="px-4">
 					<Tabs.Trigger value="overview">Overview</Tabs.Trigger>
-					<Tabs.Trigger value="settings">Variables & Settings</Tabs.Trigger>
-					<Tabs.Trigger value="environments">Environments</Tabs.Trigger>
+					<Tabs.Trigger value="actions" class="flex items-center gap-2">
+						Actions
+						<span class="badge-icon preset-filled-primary-500">
+							{Object.keys(collectionData.actions || {}).length}
+						</span>
+					</Tabs.Trigger>
+					<Tabs.Trigger value="settings" class="flex items-center gap-2">
+						Variables
+						<span class="badge-icon preset-filled-primary-500">
+							{Object.keys(collectionData.pre || {}).length}
+						</span>
+					</Tabs.Trigger>
+					<Tabs.Trigger value="environments" class="flex items-center gap-2">
+						Environments
+						<span class="badge-icon preset-filled-primary-500">
+							{collectionData.environments?.length || 0}
+						</span>
+					</Tabs.Trigger>
 					<Tabs.Indicator />
 				</Tabs.List>
 			{/if}
@@ -99,13 +105,33 @@
 				<Tabs.Content value="overview">
 					<!-- Placeholder for Collection Content -->
 					<div class="card">
-						<h3 class="mb-2 h3">Details</h3>
-						<p>Collection path: {collectionStore.activeCollection}</p>
+						{#if collectionData && collectionStore.activeCollection}
+							<div class="mt-1">
+								<EditableDescription
+									collectionPath={collectionStore.activeCollection}
+									description={collectionData.description || ''}
+									onupdate={(newDesc) => {
+										if (collectionData) collectionData.description = newDesc;
+									}}
+								/>
+							</div>
+						{/if}
+						<div class="mt-2">
+							<p>Collection path: {collectionStore.activeCollection}</p>
+						</div>
 						<div class="mt-4">
 							<h4 class="h4">Stats</h4>
 							<p>Environments: {collectionData.environments?.length || 0}</p>
-							<p>Actions loaded.</p>
+							<p>Actions: {Object.keys(collectionData.actions || {}).length} root items</p>
 						</div>
+					</div>
+				</Tabs.Content>
+				<Tabs.Content value="actions">
+					<div class="h-full card p-4">
+						<ActionList
+							actions={collectionData.actions}
+							collectionPath={collectionStore.activeCollection || ''}
+						/>
 					</div>
 				</Tabs.Content>
 				<Tabs.Content value="settings">
