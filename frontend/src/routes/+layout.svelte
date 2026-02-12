@@ -14,7 +14,7 @@
 
 <div class="flex h-screen w-screen flex-col overflow-hidden">
 	<AppBar />
-	<div class="flex flex-1 overflow-hidden">
+	<div class="flex flex-1 overflow-auto">
 		{#if layoutStore.isSidebarOpen}
 			<div transition:slide={{ axis: 'x', duration: 400, easing: cubicInOut }}>
 				<Sidebar />

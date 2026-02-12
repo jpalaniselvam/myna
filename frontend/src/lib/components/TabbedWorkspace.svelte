@@ -28,7 +28,7 @@
 	}
 </script>
 
-<div class="flex h-full flex-col overflow-hidden pt-2">
+<div class="flex h-full flex-col pt-2">
 	{#if workspaceStore.tabs.length > 0}
 		<Tabs value={workspaceStore.activeTabId || ''} onValueChange={handleValueChange}>
 			<Tabs.List>

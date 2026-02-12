@@ -62,7 +62,7 @@
 	>
 		<!-- Dialog Card -->
 		<div
-			class="bg-surface-100-800-token w-full max-w-lg overflow-hidden card border border-surface-500/20 shadow-2xl"
+			class="bg-surface-100-800-token w-full max-w-lg card border border-surface-500/20 shadow-2xl"
 		>
 			<!-- Header -->
 			<header class="flex items-center justify-between border-b border-surface-500/20 p-6">
