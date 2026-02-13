@@ -15,6 +15,7 @@ kind = "<service>.<operation>"
 description = "Description of what this action does"
 
 # Optional Authentication Overrides
+[credentials]
 profile = "my-profile"
 region = "us-east-1"
 role_arn = "arn:aws:iam::..."
@@ -41,10 +42,15 @@ data = """
 | `version` | string | Format version (e.g., "1.0") |
 | `kind` | string | The type of action (e.g., `lambda.invoke`, `sqs.send_message`) |
 | `description` | string | Human-readable description |
+| `timeout_ms` | int | (Optional) Client timeout in milliseconds |
+
+### `[credentials]` Block
+
+| Field | Type | Description |
+| :--- | :--- | :--- |
 | `region` | string | (Optional) AWS Region override |
 | `profile` | string | (Optional) AWS Named Profile override |
 | `role_arn` | string | (Optional) IAM Role to assume |
-| `timeout_ms` | int | (Optional) Client timeout in milliseconds |
 
 ### `[pre]` Block
 

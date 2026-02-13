@@ -1,6 +1,8 @@
 version = "1.0"
 kind = "lambda.x"
 description = "Sample Lambda Invocation"
+
+[credentials]
 region = "us-east-1"
 profile = "default"
 

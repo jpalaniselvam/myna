@@ -1,6 +1,7 @@
 version = "1.0"
 kind = "collection"
 description = "My collection description"
+[credentials]
 profile = "{{profile}}"
 region = "{{region}}"
 [pre]

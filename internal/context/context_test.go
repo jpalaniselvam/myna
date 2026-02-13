@@ -215,6 +215,7 @@ func TestBuildExecutionContext(t *testing.T) {
 	// myna.toml
 	os.WriteFile(filepath.Join(tmpDir, "myna.toml"), []byte(`
 kind = "collection" 
+[credentials]
 profile = "col-profile"
 region = "col-region"
 [pre]
@@ -240,8 +241,8 @@ env_var = "env"
 			t.Fatalf("BuildExecutionContext failed: %v", err)
 		}
 
-		if ctx.Profile != "col-profile" {
-			t.Errorf("expected profile col-profile, got %s", ctx.Profile)
+		if ctx.Credentials.Profile != "col-profile" {
+			t.Errorf("expected profile col-profile, got %s", ctx.Credentials.Profile)
 		}
 
 		// Verify resolver has access to both env and collection vars.

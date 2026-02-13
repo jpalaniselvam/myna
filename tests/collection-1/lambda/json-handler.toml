@@ -1,6 +1,8 @@
 version = "1.0"
 kind = "lambda.invoke"
 description = "Invoke JSON Handler"
+
+[credentials]
 profile = "{{profile}}"
 region = "{{region}}"
 
