@@ -16,6 +16,7 @@ type CollectionResponse struct {
 	Environments []string               `json:"environments"`
 	Pre          map[string]interface{} `json:"pre"`
 	Actions      map[string]interface{} `json:"actions"`
+	Credentials  types.Credentials      `json:"credentials"`
 }
 
 // Create creates a new collection
@@ -59,7 +60,7 @@ func Create(baseDir, name, desc string) error {
 }
 
 // Update updates an existing collection
-func Update(collectionPath, name, desc string, pre map[string]interface{}) error {
+func Update(collectionPath, name, desc string, pre map[string]interface{}, creds *types.Credentials) error {
 	if collectionPath == "" {
 		return fmt.Errorf("base-dir (collection path) is required")
 	}
@@ -84,6 +85,9 @@ func Update(collectionPath, name, desc string, pre map[string]interface{}) error
 
 	if pre != nil {
 		coll.Vars.Pre = pre
+	}
+	if creds != nil {
+		coll.Credentials = *creds
 	}
 
 	// Save updates
@@ -156,6 +160,7 @@ func Get(collectionPath string) (*CollectionResponse, error) {
 		Pre:          coll.Vars.Pre,
 		Environments: []string{},
 		Actions:      make(map[string]interface{}),
+		Credentials:  coll.Credentials,
 	}
 
 	// List Environments

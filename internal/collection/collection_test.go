@@ -107,7 +107,7 @@ func TestUpdate(t *testing.T) {
 		newDesc := "Updated Desc"
 		preVars := map[string]interface{}{"key": "value"}
 
-		err := Update(collPath, name, newDesc, preVars)
+		err := Update(collPath, name, newDesc, preVars, nil)
 		if err != nil {
 			t.Fatalf("Update failed: %v", err)
 		}
@@ -128,7 +128,7 @@ func TestUpdate(t *testing.T) {
 
 	t.Run("Rename", func(t *testing.T) {
 		newName := "renamed-col"
-		err := Update(collPath, newName, "", nil)
+		err := Update(collPath, newName, "", nil, nil)
 		if err != nil {
 			t.Fatalf("Rename failed: %v", err)
 		}
@@ -147,7 +147,7 @@ func TestUpdate(t *testing.T) {
 	})
 
 	t.Run("MissingArgs", func(t *testing.T) {
-		err := Update("", "name", "desc", nil)
+		err := Update("", "name", "desc", nil, nil)
 		if err == nil {
 			t.Error("expected error for missing collection path")
 		}
@@ -193,7 +193,7 @@ func TestGet(t *testing.T) {
 	Create(tmpDir, name, "desc")
 
 	// Update with some vars
-	Update(collPath, name, "", map[string]interface{}{"foo": "bar"})
+	Update(collPath, name, "", map[string]interface{}{"foo": "bar"}, nil)
 
 	// Create environment file
 	os.WriteFile(filepath.Join(collPath, "environments", "dev.toml"), []byte{}, 0644)

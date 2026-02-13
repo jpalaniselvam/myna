@@ -30,7 +30,7 @@
 			// UpdateCollection(collectionPath, name, desc, pre)
 			// We only want to update description. Name and pre usage:
 			// Backend logic: name="" -> no rename. pre=nil -> no update to pre.
-			await UpdateCollection(collectionPath, '', editValue, new Map<string, string>());
+			await UpdateCollection(collectionPath, '', editValue, {}, null);
 			onupdate(editValue);
 			editing = false;
 		} catch (e: any) {

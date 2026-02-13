@@ -54,8 +54,8 @@ export function UpdateAction(arg1) {
   return window['go']['main']['App']['UpdateAction'](arg1);
 }
 
-export function UpdateCollection(arg1, arg2, arg3, arg4) {
-  return window['go']['main']['App']['UpdateCollection'](arg1, arg2, arg3, arg4);
+export function UpdateCollection(arg1, arg2, arg3, arg4, arg5) {
+  return window['go']['main']['App']['UpdateCollection'](arg1, arg2, arg3, arg4, arg5);
 }
 
 export function UpdateEnvVar(arg1, arg2, arg3, arg4) {

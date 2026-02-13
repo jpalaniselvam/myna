@@ -5,9 +5,6 @@ export interface Metadata {
   version: string;
   kind: string;
   description: string;
-  region?: string;
-  profile?: string;
-  role_arn?: string;
   timeout_ms?: number;
 }
 
@@ -24,11 +21,9 @@ export interface BaseAction {
   version: string;
   kind: string;
   description: string;
-  region?: string;
-  profile?: string;
-  role_arn?: string;
   timeout_ms?: number;
   pre: Record<string, any>;
+  credentials: Credentials;
   payload: Payload;
 }
 
@@ -36,10 +31,8 @@ export interface Collection {
   version: string;
   kind: string;
   description: string;
-  region?: string;
-  profile?: string;
-  role_arn?: string;
   timeout_ms?: number;
+  credentials: Credentials;
   pre: Record<string, any>;
 }
 
@@ -47,11 +40,9 @@ export interface EC2Action {
   version: string;
   kind: string;
   description: string;
-  region?: string;
-  profile?: string;
-  role_arn?: string;
   timeout_ms?: number;
   pre: Record<string, any>;
+  credentials: Credentials;
   payload: Payload;
   ec2: EC2Config;
 }
@@ -68,11 +59,9 @@ export interface EventBridgeAction {
   version: string;
   kind: string;
   description: string;
-  region?: string;
-  profile?: string;
-  role_arn?: string;
   timeout_ms?: number;
   pre: Record<string, any>;
+  credentials: Credentials;
   payload: Payload;
   eventbridge: EventBridgeConfig;
 }
@@ -100,11 +89,9 @@ export interface LambdaAction {
   version: string;
   kind: string;
   description: string;
-  region?: string;
-  profile?: string;
-  role_arn?: string;
   timeout_ms?: number;
   pre: Record<string, any>;
+  credentials: Credentials;
   payload: Payload;
   lambda: LambdaConfig;
 }
@@ -127,11 +114,9 @@ export interface RDSAction {
   version: string;
   kind: string;
   description: string;
-  region?: string;
-  profile?: string;
-  role_arn?: string;
   timeout_ms?: number;
   pre: Record<string, any>;
+  credentials: Credentials;
   payload: Payload;
   rds: RDSConfig;
 }
@@ -147,11 +132,9 @@ export interface SESAction {
   version: string;
   kind: string;
   description: string;
-  region?: string;
-  profile?: string;
-  role_arn?: string;
   timeout_ms?: number;
   pre: Record<string, any>;
+  credentials: Credentials;
   payload: Payload;
   ses: SESConfig;
 }
@@ -171,11 +154,9 @@ export interface SFNAction {
   version: string;
   kind: string;
   description: string;
-  region?: string;
-  profile?: string;
-  role_arn?: string;
   timeout_ms?: number;
   pre: Record<string, any>;
+  credentials: Credentials;
   payload: Payload;
   sfn: SFNConfig;
 }
@@ -192,11 +173,9 @@ export interface SNSAction {
   version: string;
   kind: string;
   description: string;
-  region?: string;
-  profile?: string;
-  role_arn?: string;
   timeout_ms?: number;
   pre: Record<string, any>;
+  credentials: Credentials;
   payload: Payload;
   sns: SNSConfig;
 }
@@ -227,11 +206,9 @@ export interface SQSAction {
   version: string;
   kind: string;
   description: string;
-  region?: string;
-  profile?: string;
-  role_arn?: string;
   timeout_ms?: number;
   pre: Record<string, any>;
+  credentials: Credentials;
   payload: Payload;
   sqs: SQSConfig;
 }
