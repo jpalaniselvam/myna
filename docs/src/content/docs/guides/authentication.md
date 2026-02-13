@@ -7,7 +7,7 @@ description: How to handle AWS authentication in myna.
 
 ## Core Principles
 
-1.  **No Credentials in Files**: `myna` does **not** store access keys or secrets in its TOML files. It only references profile names (`profile = "dev"`) or role ARNs.
+1.  **No Credentials in Files**: `myna` does **not** store access keys or secrets in its TOML files. It only references profile names or role ARNs within a `[credentials]` block.
 2.  **Standard Configuration**: It uses the standard `~/.aws/credentials` and `~/.aws/config` files.
 3.  **Flexibility**: Different actions can run as different users/roles.
 
@@ -32,6 +32,8 @@ To specify which AWS profile to use, set the `profile` field in your action's me
 version = "1.0"
 kind = "lambda.invoke"
 description = "Invoke Lambda using prod profile"
+
+[credentials]
 profile = "prod-user"
 
 [lambda]
@@ -47,6 +49,8 @@ You can also assume a specific IAM role for an action using `role_arn`. This hap
 version = "1.0"
 kind = "lambda.invoke"
 description = "Invoke using assumed role"
+
+[credentials]
 profile = "ci-user"
 role_arn = "arn:aws:iam::123456789012:role/DeployRole"
 
@@ -59,6 +63,10 @@ function_name = "deploy-function"
 `myna` works seamlessly with AWS SSO (Identity Center).
 
 1.  Login via the AWS CLI: `aws sso login --profile my-sso-profile`
-2.  Reference the profile in your action: `profile = "my-sso-profile"`
+2.  Reference the profile in your action:
+    ```toml
+    [credentials]
+    profile = "my-sso-profile"
+    ```
 
 If your session has expired, `myna` will prompt you to login again.

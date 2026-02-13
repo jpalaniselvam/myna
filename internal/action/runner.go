@@ -42,15 +42,17 @@ func RunAction(filePath string, envName string) error {
 		return nil
 	}
 
-	actionKind = action.Base().Kind
-	profile, region := execCtx.InheritConfig(action.Base().Profile, action.Base().Region)
+	baseAction := action.Base()
+
+	actionKind = baseAction.Kind
+	profile, region := execCtx.InheritConfig(baseAction.Credentials.Profile, baseAction.Credentials.Region)
 	actionProfile = profile
 	actionRegion = region
 
 	baseDir := filepath.Dir(filePath)
-	payloadData, err := payload.Resolve(action.Base().Payload, baseDir, execCtx.Resolver)
+	payloadData, err := payload.Resolve(baseAction.Payload, baseDir, execCtx.Resolver)
 	if err != nil {
-		actionErr = fmt.Errorf("unsupported payload: %s", action.Base().Payload)
+		actionErr = fmt.Errorf("unsupported payload: %s", baseAction.Payload)
 		return nil
 	}
 

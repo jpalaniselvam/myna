@@ -41,10 +41,13 @@ type Metadata struct {
 	Version     string `toml:"version" json:"version"`
 	Kind        Kind   `toml:"kind" json:"kind"`
 	Description string `toml:"description" json:"description"`
-	Region      string `toml:"region,omitempty" json:"region,omitempty"`
-	Profile     string `toml:"profile,omitempty" json:"profile,omitempty"`
-	RoleARN     string `toml:"role_arn,omitempty" json:"role_arn,omitempty"`
 	TimeoutMs   int    `toml:"timeout_ms,omitempty" json:"timeout_ms,omitempty"`
+}
+
+type Credentials struct {
+	Region  string `toml:"region,omitempty" json:"region,omitempty"`
+	Profile string `toml:"profile,omitempty" json:"profile,omitempty"`
+	RoleARN string `toml:"role_arn,omitempty" json:"role_arn,omitempty"`
 }
 
 // Vars contains pre. no support for post as of now
@@ -61,10 +64,12 @@ type Payload struct {
 type BaseAction struct {
 	Metadata
 	Vars
-	Payload Payload `toml:"payload" json:"payload"`
+	Credentials Credentials `toml:"credentials" json:"credentials"`
+	Payload     Payload     `toml:"payload" json:"payload"`
 }
 
 type Collection struct {
 	Metadata
+	Credentials Credentials `toml:"credentials" json:"credentials"`
 	Vars
 }

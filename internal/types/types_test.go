@@ -29,9 +29,11 @@ func TestBaseAction_JSON(t *testing.T) {
 			Version:     "1.0",
 			Kind:        KindLambdaInvoke,
 			Description: "Test Lambda Invoke",
-			Region:      "us-east-1",
-			Profile:     "default",
 			TimeoutMs:   5000,
+		},
+		Credentials: Credentials{
+			Region:  "us-east-1",
+			Profile: "default",
 		},
 		Vars: Vars{
 			Pre: map[string]interface{}{
@@ -93,7 +95,10 @@ func TestBaseAction_TOML(t *testing.T) {
 			Version:     "1.0",
 			Kind:        KindSQSSend,
 			Description: "Test SQS Send",
-			Region:      "us-west-2",
+		},
+		Credentials: Credentials{
+			Region:  "us-west-2",
+			Profile: "default",
 		},
 		Vars: Vars{
 			Pre: map[string]interface{}{

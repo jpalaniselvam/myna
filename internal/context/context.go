@@ -174,10 +174,9 @@ func LoadEnvironmentVariables(collectionRoot, envName string) (map[string]interf
 
 // ExecutionContext holds the resolved execution context for an action
 type ExecutionContext struct {
-	Resolver   *varsub.Resolver
-	Collection *baseTypes.Collection
-	Profile    string
-	Region     string
+	Resolver    *varsub.Resolver
+	Collection  *baseTypes.Collection
+	Credentials *baseTypes.Credentials
 }
 
 // BuildExecutionContext creates an execution context by loading environment, collection, and resolver
@@ -213,17 +212,10 @@ func BuildExecutionContext(actionPath, envName string) (*ExecutionContext, error
 		resolver.AddScope(collection.Pre)
 	}
 
-	var profile, region string
-	if collection != nil {
-		profile = collection.Profile
-		region = collection.Region
-	}
-
 	return &ExecutionContext{
-		Resolver:   resolver,
-		Collection: collection,
-		Profile:    profile,
-		Region:     region,
+		Resolver:    resolver,
+		Collection:  collection,
+		Credentials: &collection.Credentials,
 	}, nil
 }
 
@@ -231,12 +223,12 @@ func BuildExecutionContext(actionPath, envName string) (*ExecutionContext, error
 func (ctx *ExecutionContext) InheritConfig(actionProfile, actionRegion string) (profile, region string) {
 	profile = actionProfile
 	if profile == "" {
-		profile = ctx.Profile
+		profile = ctx.Credentials.Profile
 	}
 
 	region = actionRegion
 	if region == "" {
-		region = ctx.Region
+		region = ctx.Credentials.Region
 	}
 
 	return profile, region

@@ -29,6 +29,10 @@ version = "1.0"
 kind = "collection"
 description = "User Management API"
 
+[credentials]
+region = "us-east-1"
+profile = "dev-profile"
+
 [pre]
 # Variables available to all actions in this collection
 API_VERSION = "v1"
@@ -43,6 +47,7 @@ TABLE_NAME = "users-${ENV}"
 | `version` | The version of the collection format (e.g., "1.0") |
 | `kind` | Must be `"collection"` |
 | `description` | A human-readable description |
+| `[credentials]` | (Optional) Shared AWS credentials (region, profile) |
 | `[pre]` | A table of shared variables (strings, numbers, booleans) |
 
 ## Variable Inheritance
