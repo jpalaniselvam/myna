@@ -61,7 +61,7 @@
 			error = '';
 			result = '';
 			const pre = JSON.parse(updatePreJson);
-			await UpdateCollection(updatePath, updateName, updateDesc, pre);
+			await UpdateCollection(updatePath, updateName, updateDesc, pre, null);
 			result = `Collection updated successfully.`;
 		} catch (e: any) {
 			error = String(e);

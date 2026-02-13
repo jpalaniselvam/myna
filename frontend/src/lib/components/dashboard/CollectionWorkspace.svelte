@@ -3,6 +3,7 @@
 	import { GetCollection } from 'wailsjs/go/main/App';
 	import type { collection } from 'wailsjs/go/models';
 	import CollectionVariables from '$lib/components/dashboard/CollectionVariables.svelte';
+	import CollectionCredentials from '$lib/components/dashboard/CollectionCredentials.svelte';
 	import EnvironmentManager from '$lib/components/dashboard/EnvironmentManager.svelte';
 	import ActionList from '$lib/components/dashboard/ActionList.svelte';
 	import CollectionOverview from '$lib/components/dashboard/CollectionOverview.svelte';
@@ -51,6 +52,9 @@
 			{#if collectionData}
 				<Tabs.List class="px-4">
 					<Tabs.Trigger value="overview">Overview</Tabs.Trigger>
+					<Tabs.Trigger value="credentials" class="flex items-center gap-2">
+						Credentials
+					</Tabs.Trigger>
 					<Tabs.Trigger value="actions" class="flex items-center gap-2">
 						Actions
 						<span class="badge-icon preset-filled-primary-500">
@@ -94,6 +98,20 @@
 						}}
 					/>
 				</Tabs.Content>
+				<Tabs.Content value="credentials">
+					<div class="p-4">
+						<div class="card p-4">
+							<CollectionCredentials
+								collectionPath={collectionStore.activeCollection || ''}
+								credentials={collectionData.credentials}
+								variables={collectionData.pre}
+								onupdate={(newCreds) => {
+									if (collectionData) collectionData.credentials = newCreds;
+								}}
+							/>
+						</div>
+					</div>
+				</Tabs.Content>
 				<Tabs.Content value="actions">
 					<div class="h-full p-4">
 						<div class="h-full card p-4">
@@ -110,6 +128,7 @@
 							<CollectionVariables
 								collectionPath={collectionStore.activeCollection || ''}
 								variables={collectionData.pre}
+								credentials={collectionData.credentials}
 								onupdate={(newVars) => {
 									if (collectionData) collectionData.pre = newVars;
 								}}

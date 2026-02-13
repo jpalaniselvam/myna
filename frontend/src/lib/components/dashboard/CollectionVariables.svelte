@@ -2,9 +2,10 @@
 	import { UpdateCollection } from 'wailsjs/go/main/App';
 	import { slide } from 'svelte/transition';
 
-	let { collectionPath, variables, onupdate } = $props<{
+	let { collectionPath, variables, credentials, onupdate } = $props<{
 		collectionPath: string;
 		variables: Record<string, any>;
+		credentials: any;
 		onupdate: (newVars: Record<string, any>) => void;
 	}>();
 
@@ -63,7 +64,7 @@
 			// if pre != nil { coll.Vars.Pre = pre }
 			// So passing "" for desc is safe.
 
-			await UpdateCollection(collectionPath, '', '', pre);
+			await UpdateCollection(collectionPath, '', '', pre, credentials);
 
 			onupdate(pre);
 			isDirty = false;

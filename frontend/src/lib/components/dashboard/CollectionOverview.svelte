@@ -27,7 +27,13 @@
 		loading = true;
 		error = '';
 		try {
-			await UpdateCollection(collectionPath, '', editValue, collectionData.pre);
+			await UpdateCollection(
+				collectionPath,
+				'',
+				editValue,
+				collectionData.pre,
+				collectionData.credentials
+			);
 			onupdate(editValue);
 			editing = false;
 		} catch (e: any) {

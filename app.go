@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/jpalaniselvam/myna/internal/collection"
+	"github.com/jpalaniselvam/myna/internal/types"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
@@ -35,8 +36,8 @@ func (a *App) CreateCollection(baseDir, name, desc string) error {
 }
 
 // UpdateCollection updates an existing collection
-func (a *App) UpdateCollection(collectionPath, name, desc string, pre map[string]interface{}) error {
-	return collection.Update(collectionPath, name, desc, pre)
+func (a *App) UpdateCollection(collectionPath, name, desc string, pre map[string]interface{}, creds *types.Credentials) error {
+	return collection.Update(collectionPath, name, desc, pre, creds)
 }
 
 // DeleteCollection deletes a completely
