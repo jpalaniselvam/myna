@@ -105,7 +105,6 @@
 							console.log('Run action:', node.path);
 						}}
 					>
-						<Play size={12} />
 					</button>
 				</div>
 			</TreeView.Item>

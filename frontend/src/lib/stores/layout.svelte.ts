@@ -1,6 +1,7 @@
 
 export class LayoutStore {
     isSidebarOpen = $state(true);
+    sidebarWidth = $state(256);
 
     constructor() { }
 
@@ -10,6 +11,10 @@ export class LayoutStore {
 
     setSidebarOpen(value: boolean) {
         this.isSidebarOpen = value;
+    }
+
+    setSidebarWidth(width: number) {
+        this.sidebarWidth = Math.max(200, Math.min(width, 600));
     }
 }
 
