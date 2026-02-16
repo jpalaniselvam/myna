@@ -11,9 +11,11 @@
 	import ErrorBanner from './ErrorBanner.svelte';
 
 	import { workspaceStore } from '$lib/stores/workspace.svelte';
+	import { layoutStore } from '$lib/stores/layout.svelte';
 
 	let showCreateDialog = $state(false);
 	let error = $state('');
+	let isResizing = $state(false);
 
 	function handleSelectCollection(path: string) {
 		const name = path.split(/[\\/]/).pop() || 'Collection';
@@ -63,9 +65,33 @@
 			console.error(error);
 		}
 	}
+
+	function startResizing(e: MouseEvent) {
+		isResizing = true;
+		document.body.style.cursor = 'col-resize';
+		document.body.style.userSelect = 'none';
+		e.preventDefault();
+	}
+
+	function stopResizing() {
+		isResizing = false;
+		document.body.style.cursor = '';
+		document.body.style.userSelect = '';
+	}
+
+	function onMouseMove(e: MouseEvent) {
+		if (!isResizing) return;
+		layoutStore.setSidebarWidth(e.clientX);
+	}
 </script>
 
-<aside class="bg-surface-50-900-token flex h-full w-64 flex-col border-r border-surface-500/30">
+<svelte:window onmousemove={onMouseMove} onmouseup={stopResizing} />
+
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<aside
+	class="bg-surface-50-900-token group relative flex h-full shrink-0 flex-col border-r border-surface-500/30"
+	style="width: {layoutStore.sidebarWidth}px;"
+>
 	{#if error}
 		<div class="fixed top-4 right-4 z-50 w-full max-w-xs transition-all">
 			<ErrorBanner message={error} ondismiss={() => (error = '')} />
@@ -83,4 +109,13 @@
 	/>
 
 	<CreateCollectionDialog bind:open={showCreateDialog} onsubmit={onCreateSubmit} />
+
+	<!-- Resize Handle -->
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
+	<div
+		onmousedown={startResizing}
+		class="absolute top-0 -right-1 z-10 h-full w-2 cursor-col-resize transition-colors hover:bg-primary-500/30 {isResizing
+			? 'bg-primary-500/50'
+			: ''}"
+	></div>
 </aside>
