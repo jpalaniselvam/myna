@@ -28,6 +28,9 @@ jobs:
     - name: CLI Build
       run: go build -v ./cmd/myna
 
+    - name: Frontend Build
+      run: cd frontend && npm install && npm run build
+
     - name: Desktop Build
       run: echo "Skipping desktop build for now"
 
