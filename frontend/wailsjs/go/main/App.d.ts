@@ -19,6 +19,8 @@ export function DeleteEnvVar(arg1:string,arg2:string,arg3:string):Promise<void>;
 
 export function GetAction(arg1:collection.GetActionInput):Promise<any>;
 
+export function GetActionKinds():Promise<Array<types.Kind>>;
+
 export function GetCollection(arg1:string):Promise<collection.CollectionResponse>;
 
 export function GetEnvironment(arg1:string,arg2:string):Promise<Record<string, any>>;

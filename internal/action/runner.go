@@ -87,6 +87,9 @@ func RunAction(filePath string, envName string) error {
 	// SFN
 	case baseTypes.KindSFNListStateMachines, baseTypes.KindSFNStartExecution, baseTypes.KindSFNDescribeExecution, baseTypes.KindSFNStopExecution:
 		actionResult, actionErr = runSFNAction(cfg, action.Content(), payloadData)
+	// DynamoDB
+	case baseTypes.KindDynamoDBListTables, baseTypes.KindDynamoDBPutItem, baseTypes.KindDynamoDBGetItem, baseTypes.KindDynamoDBUpdateItem, baseTypes.KindDynamoDBDeleteItem, baseTypes.KindDynamoDBQuery, baseTypes.KindDynamoDBScan:
+		actionResult, actionErr = runDynamoDBAction(cfg, action.Content(), payloadData)
 	default:
 		actionErr = fmt.Errorf("unsupported action kind: %s", actionKind)
 	}

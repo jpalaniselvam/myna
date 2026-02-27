@@ -1,0 +1,16 @@
+version = "1.0"
+kind = "dynamodb.put_item"
+description = "Put a new user item"
+
+[dynamodb]
+table_name = "myna-test-users"
+
+[payload]
+data = """
+{
+  "UserId": "user-1",
+  "Name": "John Doe",
+  "Email": "john@example.com",
+  "Age": 25
+}
+"""

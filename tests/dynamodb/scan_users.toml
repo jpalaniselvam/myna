@@ -1,0 +1,7 @@
+version = "1.0"
+kind = "dynamodb.scan"
+description = "Scan users table"
+
+[dynamodb]
+table_name = "myna-test-users"
+limit = 10

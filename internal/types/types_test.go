@@ -182,3 +182,38 @@ func TestLambdaAction(t *testing.T) {
 		}
 	})
 }
+func TestDynamoDBAction(t *testing.T) {
+	original := DynamoDBAction{
+		BaseAction: BaseAction{
+			Metadata: Metadata{
+				Kind: KindDynamoDBPutItem,
+			},
+		},
+		DynamoDB: DynamoDBConfig{
+			TableName: "test-table",
+			Key: map[string]interface{}{
+				"id": "123",
+			},
+		},
+	}
+
+	t.Run("TOML", func(t *testing.T) {
+		data, err := parser.Marshal(original)
+		if err != nil {
+			t.Fatalf("TOML marshal failed: %v", err)
+		}
+
+		var decoded DynamoDBAction
+		if err := parser.Unmarshal(data, &decoded); err != nil {
+			t.Fatalf("TOML unmarshal failed: %v", err)
+		}
+
+		if decoded.DynamoDB.TableName != original.DynamoDB.TableName {
+			t.Errorf("TOML mismatch TableName: got %v, want %v", decoded.DynamoDB.TableName, original.DynamoDB.TableName)
+		}
+
+		if decoded.DynamoDB.Key["id"] != original.DynamoDB.Key["id"] {
+			t.Errorf("TOML mismatch Key: got %v, want %v", decoded.DynamoDB.Key, original.DynamoDB.Key)
+		}
+	})
+}

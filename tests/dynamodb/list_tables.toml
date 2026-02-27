@@ -1,0 +1,3 @@
+version = "1.0"
+kind = "dynamodb.list_tables"
+description = "List all DynamoDB tables"

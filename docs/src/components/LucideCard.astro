@@ -1,0 +1,74 @@
+---
+const { title } = Astro.props;
+---
+
+<article class="myna-lucide-card">
+  <div class="card-header">
+    {Astro.slots.has('icon') && (
+      <div class="icon-wrapper">
+        <slot name="icon" />
+      </div>
+    )}
+    <p class="title">{title}</p>
+  </div>
+  <div class="body">
+    <slot />
+  </div>
+</article>
+
+<style>
+  .myna-lucide-card {
+    --sl-card-border: var(--sl-color-gray-5);
+    --sl-card-bg: var(--sl-color-black);
+    
+    border: 1px solid var(--sl-card-border);
+    background-color: var(--sl-card-bg);
+    padding: clamp(1rem, calc(0.125rem + 3vw), 2rem);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    height: 100%;
+  }
+
+  /* Match CardGrid's stagger effect if inside one */
+  :global(.card-grid) .myna-lucide-card {
+    box-shadow: var(--sl-shadow-sm);
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--sl-color-white);
+  }
+
+  .icon-wrapper {
+    line-height: 0;
+    color: var(--sl-color-accent-high);
+  }
+
+  .icon-wrapper :global(svg) {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .title {
+    font-weight: 600;
+    font-size: var(--sl-text-h4);
+    line-height: var(--sl-line-height-headings);
+    margin: 0 !important;
+  }
+
+  .body {
+    margin: 0;
+    font-size: var(--sl-text-base);
+    color: var(--sl-color-gray-3);
+    line-height: 1.5;
+  }
+
+  /* Hover effect for a premium feel */
+  .myna-lucide-card:hover {
+    border-color: var(--sl-color-accent-high);
+    transition: border-color 0.2s ease-in-out;
+  }
+</style>

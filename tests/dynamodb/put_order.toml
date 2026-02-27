@@ -1,0 +1,17 @@
+version = "1.0"
+kind = "dynamodb.put_item"
+description = "Put a new order item"
+
+[dynamodb]
+table_name = "myna-test-orders"
+
+[payload]
+data = """
+{
+  "UserId": "user-1",
+  "OrderId": "order-101",
+  "Status": "PENDING",
+  "Amount": 99.99,
+  "Items": ["item-1", "item-2"]
+}
+"""

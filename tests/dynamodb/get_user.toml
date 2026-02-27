@@ -1,0 +1,7 @@
+version = "1.0"
+kind = "dynamodb.get_item"
+description = "Get user item by ID"
+
+[dynamodb]
+table_name = "myna-test-users"
+key = { "UserId" = "user-1" }

@@ -1,14 +1,14 @@
 ---
 title: myna
-description: A Git-first CLI for executing and replaying AWS serverless actions. Think Postman for AWS serverless.
+description: The Git-First Playground for AWS Serverless. Execute, replay, and automate AWS actions with clean, versionable TOML.
 template: splash
 hero:
-  tagline: A Git-first CLI for executing and replaying AWS serverless actions. Think Postman for AWS serverless.
+  tagline: Stop wrestling with the AWS Console. Execute, replay, and automate Lambda, SQS, and EventBridge actions with clean, versionable TOML.
   image:
     file: ../../assets/myna_logo.png
   actions:
     - text: Get Started
-      link: /myna/guides/design-overview/
+      link: /myna/getting-started/installation/
       icon: right-arrow
     - text: View on GitHub
       link: https://github.com/jpalaniselvam/myna
@@ -16,45 +16,141 @@ hero:
       variant: minimal
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import { CardGrid, Steps, Tabs, TabItem } from '@astrojs/starlight/components';
+import LucideCard from '../../components/LucideCard.astro';
+import { 
+  Rocket, 
+  FileCode, 
+  Repeat, 
+  Settings, 
+  Zap, 
+  MessageSquare, 
+  Share2, 
+  Database, 
+  CheckCircle, 
+  Terminal,
+  Server,
+  Mail,
+  Box,
+  LayoutGrid
+} from '@lucide/astro';
 
 ## Why myna?
 
-Modern serverless systems are built from events, queues, and functions, not just HTTP endpoints. Yet, most developer tools are still API-first. `myna` bridges this gap by providing a repeatable, Git-friendly way to interact with AWS serverless primitives.
+Modern serverless systems are built from events, queues, and functions—not just HTTP endpoints. Yet, most developer tools are still API-first. `myna` bridges this gap by providing a repeatable, Git-friendly way to interact with AWS services.
 
 <CardGrid stagger>
-	<Card title="Postman for Serverless" icon="rocket">
-		Configure Lambda requests, SQS messages, or EventBridge events in simple TOML files and execute them with a single command.
-	</Card>
-	<Card title="Git-First Design" icon="document">
-		Store your test collections as version-controlled files. No more opaque databases or proprietary formats—just clean, readable TOML.
-	</Card>
-	<Card title="Repeatable Actions" icon="refresh">
+	<LucideCard title="Postman for Serverless">
+    <Rocket slot="icon" />
+		Configure Lambda requests, SQS messages, or EventBridge events in simple TOML files. Execute them with a single command.
+	</LucideCard>
+	<LucideCard title="Git-First Design">
+    <FileCode slot="icon" />
+		Store your test collections as version-controlled files. No more opaque databases—just clean, readable TOML.
+	</LucideCard>
+	<LucideCard title="Repeatable Actions">
+    <Repeat slot="icon" />
 		Replay real events deterministically. Chain actions together without writing brittle glue code or one-off scripts.
-	</Card>
-	<Card title="Environment Savvy" icon="setting">
-		Easily manage variables across `local`, `dev`, and `prod` environments. Switch contexts seamlessly while keeping your action definitions constant.
-	</Card>
-	<Card title="CLI Power" icon="terminal">
-		Built for the terminal. Perfect for local development, debugging in production, or running automated tests in CI/CD pipelines.
-	</Card>
-	<Card title="AWS Native" icon="external">
-		Directly support for Lambda, S3, SQS, SNS, and EventBridge. Perform basic operations without switching between AWS Console tabs.
-	</Card>
+	</LucideCard>
+	<LucideCard title="Environment Savvy">
+    <Settings slot="icon" />
+		Manage variables across `local`, `dev`, and `prod`. Switch contexts seamlessly while keeping your definitions constant.
+	</LucideCard>
 </CardGrid>
+
+---
+
+## Define it. Run it. Replay it.
+
+`myna` makes complex AWS interactions feel like simple local scripts.
+
+<Tabs>
+  <TabItem label="Lambda">
+    <Zap slot="icon" size={16} />
+    ```toml
+    # invoke-handler.toml
+    kind = "lambda.invoke"
+
+    [lambda]
+    function_name = "process-order"
+
+    [payload]
+    data = '{ "order_id": "123", "status": "PENDING" }'
+    ```
+  </TabItem>
+  <TabItem label="SQS">
+    <MessageSquare slot="icon" size={16} />
+    ```toml
+    # send-message.toml
+    kind = "sqs.send"
+
+    [sqs]
+    queue_url = "https://sqs.us-east-1.amazonaws.com/123456789012/my-queue"
+
+    [payload]
+    data = "New order received"
+    ```
+  </TabItem>
+  <TabItem label="EventBridge">
+    <Share2 slot="icon" size={16} />
+    ```toml
+    # put-event.toml
+    kind = "eventbridge.put"
+
+    [eventbridge]
+    event_bus_name = "default"
+    source = "my.app"
+    detail_type = "OrderCreated"
+
+    [payload]
+    data = '{ "id": "99" }'
+    ```
+  </TabItem>
+</Tabs>
+
+---
 
 ## How it Works
 
-`myna` organizes your AWS interactions into **Collections** and **Actions**. 
+Setting up a robust testing workflow only takes three steps.
 
-```text
-my-collection/
-├── myna.toml          # Collection metadata
-├── environments/      # Environment-specific variables
-│   ├── dev.toml
-│   └── prod.toml
-├── invoke-lambda.toml # Action definition
-└── send-to-sqs.toml   # Action definition
-```
+<Steps>
+1. **Create a Collection**
+   Initialize a directory with a `myna.toml` to manage your shared variables and environments.
 
-Deploying a serverless stack is only half the battle. Testing and replaying events is where `myna` shines.
+2. **Define Your Actions**
+   Write simple TOML files for each AWS interaction. Use `{{variable}}` syntax to keep them dynamic.
+
+3. **Execute Anywhere**
+   Run actions from your terminal, integrate them into CI/CD, or share them with your team via Git.
+</Steps>
+
+---
+
+## Supported Services
+
+Myna is designed to be the Swiss Army knife for AWS serverless developers.
+
+<CardGrid>
+  <LucideCard title="Compute">
+    Lambda (Invoke, List, Logs)
+  </LucideCard>
+  <LucideCard title="Messaging">
+    SQS, SNS, EventBridge
+  </LucideCard>
+  <LucideCard title="Storage">
+    S3 (Upload, Download, List)
+  </LucideCard>
+  <LucideCard title="Database">
+    DynamoDB (Scan, Query, Get)
+  </LucideCard>
+</CardGrid>
+
+---
+
+<LucideCard title="Ready to upgrade your serverless workflow?">
+  <CheckCircle slot="icon" />
+  Stop copying JSON from the AWS Console. Start building a versioned source of truth for your serverless events.
+
+  [Install Myna Now](/myna/getting-started/installation/)
+</LucideCard>

@@ -34,6 +34,14 @@ const (
 
 	KindSESSendEmail           Kind = "ses.send_email"
 	KindSESVerifyEmailIdentity Kind = "ses.verify_email_identity"
+
+	KindDynamoDBListTables Kind = "dynamodb.list_tables"
+	KindDynamoDBPutItem    Kind = "dynamodb.put_item"
+	KindDynamoDBGetItem    Kind = "dynamodb.get_item"
+	KindDynamoDBUpdateItem Kind = "dynamodb.update_item"
+	KindDynamoDBDeleteItem Kind = "dynamodb.delete_item"
+	KindDynamoDBQuery      Kind = "dynamodb.query"
+	KindDynamoDBScan       Kind = "dynamodb.scan"
 )
 
 // Metadata contains common fields for all actions
