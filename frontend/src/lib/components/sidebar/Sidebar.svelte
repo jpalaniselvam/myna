@@ -23,6 +23,26 @@
 		collectionStore.setActive(path);
 	}
 
+	function handleSelectAction(collectionPath: string, subPath: string, fileName: string) {
+		const id = `${collectionPath}/${subPath}/${fileName}`;
+		const title = fileName.replace('.toml', '');
+		workspaceStore.openTab('action', id, title, { collectionPath, subPath, fileName });
+	}
+
+	$effect(() => {
+		collectionStore.collections.forEach(async (path) => {
+			const normalized = path.replace(/\\/g, '/');
+			if (!collectionStore.collectionDetails[normalized]) {
+				try {
+					const details = await GetCollection(path);
+					collectionStore.setDetails(path, details);
+				} catch (e) {
+					console.error(`Failed to fetch details for ${path}:`, e);
+				}
+			}
+		});
+	});
+
 	function handleAddCollection() {
 		showCreateDialog = true;
 	}
@@ -105,7 +125,9 @@
 	<SidebarList
 		collections={collectionStore.collections}
 		activeCollection={collectionStore.activeCollection}
+		collectionDetails={collectionStore.collectionDetails}
 		onselect={handleSelectCollection}
+		onselectAction={handleSelectAction}
 	/>
 
 	<CreateCollectionDialog bind:open={showCreateDialog} onsubmit={onCreateSubmit} />

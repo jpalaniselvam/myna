@@ -1,9 +1,11 @@
 
 
 
+import type { collection } from '../../../wailsjs/go/models';
 
 export class CollectionStore {
     collections = $state<string[]>([]);
+    collectionDetails = $state<Record<string, collection.CollectionResponse>>({});
     activeCollection = $state<string | null>(null);
 
     constructor() { }
@@ -22,9 +24,15 @@ export class CollectionStore {
     remove(path: string) {
         const normalized = this.normalize(path);
         this.collections = this.collections.filter(c => this.normalize(c) !== normalized);
+        delete this.collectionDetails[normalized];
         if (this.activeCollection && this.normalize(this.activeCollection) === normalized) {
             this.activeCollection = null;
         }
+    }
+
+    setDetails(path: string, details: collection.CollectionResponse) {
+        const normalized = this.normalize(path);
+        this.collectionDetails[normalized] = details;
     }
 
     setActive(path: string | null) {

@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { collectionStore } from '$lib/stores/collections.svelte';
 	import { GetCollection } from 'wailsjs/go/main/App';
 	import type { collection } from 'wailsjs/go/models';
 	import CollectionVariables from '$lib/components/dashboard/CollectionVariables.svelte';
@@ -9,13 +8,24 @@
 	import CollectionOverview from '$lib/components/dashboard/CollectionOverview.svelte';
 	import { Tabs } from '@skeletonlabs/skeleton-svelte';
 
+	let { tab } = $props<{
+		tab: {
+			id: string;
+			title: string;
+			metadata: {
+				path: string;
+			};
+		};
+	}>();
+
+	let collectionPath = $derived(tab?.metadata.path || '');
 	let collectionData = $state<collection.CollectionResponse | null>(null);
 	let loading = $state(false);
 	let error = $state('');
 
-	// React to activeCollection changes
+	// React to collectionPath changes
 	$effect(() => {
-		loadCollection(collectionStore.activeCollection);
+		loadCollection(collectionPath);
 	});
 
 	async function loadCollection(path: string | null) {
@@ -37,8 +47,8 @@
 	}
 
 	function refresh() {
-		if (collectionStore.activeCollection) {
-			loadCollection(collectionStore.activeCollection);
+		if (collectionPath) {
+			loadCollection(collectionPath);
 		}
 	}
 
@@ -92,7 +102,7 @@
 				<Tabs.Content value="overview">
 					<CollectionOverview
 						{collectionData}
-						collectionPath={collectionStore.activeCollection || ''}
+						{collectionPath}
 						onupdate={(newDesc) => {
 							if (collectionData) collectionData.description = newDesc;
 						}}
@@ -102,7 +112,7 @@
 					<div class="p-4">
 						<div class="card p-4">
 							<CollectionCredentials
-								collectionPath={collectionStore.activeCollection || ''}
+								{collectionPath}
 								credentials={collectionData.credentials}
 								variables={collectionData.pre}
 								onupdate={(newCreds) => {
@@ -115,10 +125,7 @@
 				<Tabs.Content value="actions">
 					<div class="h-full p-4">
 						<div class="h-full card p-4">
-							<ActionList
-								actions={collectionData.actions}
-								collectionPath={collectionStore.activeCollection || ''}
-							/>
+							<ActionList actions={collectionData.actions} {collectionPath} />
 						</div>
 					</div>
 				</Tabs.Content>
@@ -126,7 +133,7 @@
 					<div class="p-4">
 						<div class="card p-4">
 							<CollectionVariables
-								collectionPath={collectionStore.activeCollection || ''}
+								{collectionPath}
 								variables={collectionData.pre}
 								credentials={collectionData.credentials}
 								onupdate={(newVars) => {
@@ -140,7 +147,7 @@
 					<div class="h-full p-4">
 						<div class="h-full card">
 							<EnvironmentManager
-								collectionPath={collectionStore.activeCollection || ''}
+								{collectionPath}
 								environments={collectionData.environments}
 								onrefresh={refresh}
 							/>
