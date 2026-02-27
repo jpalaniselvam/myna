@@ -8,6 +8,12 @@ export interface Metadata {
   timeout_ms?: number;
 }
 
+export interface Credentials {
+  region?: string;
+  profile?: string;
+  role_arn?: string;
+}
+
 export interface Vars {
   pre: Record<string, any>;
 }
@@ -34,6 +40,31 @@ export interface Collection {
   timeout_ms?: number;
   credentials: Credentials;
   pre: Record<string, any>;
+}
+
+export interface DynamoDBAction {
+  version: string;
+  kind: string;
+  description: string;
+  timeout_ms?: number;
+  pre: Record<string, any>;
+  credentials: Credentials;
+  payload: Payload;
+  dynamodb: DynamoDBConfig;
+}
+
+export interface DynamoDBConfig {
+  table_name: string;
+  key: Record<string, any>;
+  update_expression?: string;
+  condition_expression?: string;
+  key_condition_expression?: string;
+  filter_expression?: string;
+  expression_attribute_names?: Record<string, string>;
+  expression_attribute_values?: Record<string, any>;
+  index_name?: string;
+  limit?: number;
+  consistent_read?: boolean;
 }
 
 export interface EC2Action {

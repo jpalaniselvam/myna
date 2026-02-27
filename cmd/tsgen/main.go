@@ -13,10 +13,13 @@ import (
 // Add all exported structs here
 var typeRegistry = []interface{}{
 	types.Metadata{},
+	types.Credentials{},
 	types.Vars{},
 	types.Payload{},
 	types.BaseAction{},
 	types.Collection{},
+	types.DynamoDBAction{},
+	types.DynamoDBConfig{},
 
 	// EC2
 	types.EC2Action{},

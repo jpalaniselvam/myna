@@ -71,6 +71,17 @@ First off, thanks for taking the time to contribute! `myna` is a community-drive
 - Follow standard Go conventions (Effective Go).
 - We use `go fmt` for formatting.
 
+### Type Generation
+
+When you add or modify a struct in `internal/types` that needs to be used in the frontend, you must synchronize the TypeScript definitions:
+
+1.  **Register the Type**: Add your exported struct to the `typeRegistry` slice in `cmd/tsgen/main.go`.
+2.  **Generate Types**: Run the generator script from the root of the repository:
+    ```bash
+    go run ./cmd/tsgen/main.go
+    ```
+3.  **Verify**: Check `frontend/src/lib/go-types.ts` to ensure your types are correctly generated.
+
 ## License
 
 By contributing, you agree that your contributions will be licensed under the Apache 2.0 License.
