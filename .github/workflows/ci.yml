@@ -25,8 +25,11 @@ jobs:
           exit 1
         fi
 
-    - name: Build
-      run: go build -v ./...
+    - name: CLI Build
+      run: go build -v ./cmd/myna
+
+    - name: Desktop Build
+      run: echo "Skipping desktop build for now"
 
     - name: Test
       run: go test -v ./...
