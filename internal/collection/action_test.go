@@ -1,7 +1,6 @@
 package collection
 
 import (
-	"encoding/json"
 	"os"
 	"path/filepath"
 	"testing"
@@ -46,13 +45,11 @@ func TestCreateAction(t *testing.T) {
 			},
 		}
 
-		actionData, _ := json.Marshal(lambdaAction)
-
 		input := CreateActionInput{
 			CollectionPath: collPath,
 			SubPath:        "",
 			FileName:       "my-lambda.toml",
-			Data:           actionData,
+			Data:           lambdaAction,
 		}
 
 		err := CreateAction(input)
@@ -87,13 +84,11 @@ func TestCreateAction(t *testing.T) {
 			},
 		}
 
-		actionData, _ := json.Marshal(sqsAction)
-
 		input := CreateActionInput{
 			CollectionPath: collPath,
 			SubPath:        "subdir",
 			FileName:       "nested.toml",
-			Data:           actionData,
+			Data:           sqsAction,
 		}
 
 		err := CreateAction(input)
@@ -113,13 +108,11 @@ func TestCreateAction(t *testing.T) {
 				Kind: types.Kind("unknown.kind"),
 			},
 		}
-		actionData, _ := json.Marshal(baseAction)
-
 		input := CreateActionInput{
 			CollectionPath: collPath,
 			SubPath:        "",
 			FileName:       "unknown.toml",
-			Data:           actionData,
+			Data:           baseAction,
 		}
 		if err := CreateAction(input); err == nil {
 			t.Error("expected error for unknown kind")
@@ -145,11 +138,10 @@ func TestUpdateAction(t *testing.T) {
 			FunctionName: "initial-func",
 		},
 	}
-	actionData, _ := json.Marshal(lambdaAction)
 	createInput := CreateActionInput{
 		CollectionPath: collPath,
 		FileName:       "update-test.toml",
-		Data:           actionData,
+		Data:           lambdaAction,
 	}
 	CreateAction(createInput)
 
@@ -158,12 +150,10 @@ func TestUpdateAction(t *testing.T) {
 		updatedAction.Metadata.Description = "Updated description"
 		updatedAction.Lambda.FunctionName = "updated-func"
 
-		updatedData, _ := json.Marshal(updatedAction)
-
 		updateInput := UpdateActionInput{
 			CollectionPath: collPath,
 			FileName:       "update-test.toml",
-			Data:           updatedData,
+			Data:           updatedAction,
 		}
 
 		err := UpdateAction(updateInput)
@@ -189,7 +179,7 @@ func TestUpdateAction(t *testing.T) {
 		updateInput := UpdateActionInput{
 			CollectionPath: collPath,
 			FileName:       "non-existent.toml",
-			Data:           actionData,
+			Data:           lambdaAction,
 		}
 		if err := UpdateAction(updateInput); err == nil {
 			t.Error("expected error when updating non-existent file")
@@ -211,11 +201,10 @@ func TestDeleteAction(t *testing.T) {
 			},
 		},
 	}
-	actionData, _ := json.Marshal(lambdaAction)
 	createInput := CreateActionInput{
 		CollectionPath: collPath,
 		FileName:       "delete-test.toml",
-		Data:           actionData,
+		Data:           lambdaAction,
 	}
 	CreateAction(createInput)
 
@@ -263,11 +252,10 @@ func TestGetAction(t *testing.T) {
 			FunctionName: "get-func",
 		},
 	}
-	actionData, _ := json.Marshal(lambdaAction)
 	createInput := CreateActionInput{
 		CollectionPath: collPath,
 		FileName:       "get-test.toml",
-		Data:           actionData,
+		Data:           lambdaAction,
 	}
 	CreateAction(createInput)
 
