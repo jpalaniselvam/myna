@@ -13,18 +13,18 @@ import (
 
 // CreateActionInput represents the input expected from the UI
 type CreateActionInput struct {
-	CollectionPath string          `json:"collection_path"`
-	SubPath        string          `json:"sub_path"`
-	FileName       string          `json:"file_name"`
-	Data           json.RawMessage `json:"data"` // The action definition
+	CollectionPath string      `json:"collection_path"`
+	SubPath        string      `json:"sub_path"`
+	FileName       string      `json:"file_name"`
+	Data           interface{} `json:"data"` // The action definition
 }
 
 // UpdateActionInput represents the input for updating an action
 type UpdateActionInput struct {
-	CollectionPath string          `json:"collection_path"`
-	SubPath        string          `json:"sub_path"`
-	FileName       string          `json:"file_name"`
-	Data           json.RawMessage `json:"data"` // The action definition
+	CollectionPath string      `json:"collection_path"`
+	SubPath        string      `json:"sub_path"`
+	FileName       string      `json:"file_name"`
+	Data           interface{} `json:"data"` // The action definition
 }
 
 // GetActionInput defines the location of an action file
@@ -53,6 +53,8 @@ func getActionStruct(kind types.Kind) (interface{}, error) {
 		return &types.SFNAction{}, nil
 	case types.KindSESSendEmail, types.KindSESVerifyEmailIdentity:
 		return &types.SESAction{}, nil
+	case types.KindDynamoDBListTables, types.KindDynamoDBPutItem, types.KindDynamoDBGetItem, types.KindDynamoDBUpdateItem, types.KindDynamoDBDeleteItem, types.KindDynamoDBQuery, types.KindDynamoDBScan:
+		return &types.DynamoDBAction{}, nil
 	default:
 		return nil, fmt.Errorf("unsupported action kind: %s", kind)
 	}
@@ -70,9 +72,15 @@ func CreateAction(input CreateActionInput) error {
 		input.FileName += ".toml"
 	}
 
-	// 1. Unmarshal into BaseAction to find type
+	// 1. Marshal to get bytes for subsequent unmarshaling
+	dataBytes, err := json.Marshal(input.Data)
+	if err != nil {
+		return fmt.Errorf("failed to process action data: %w", err)
+	}
+
+	// 2. Unmarshal into BaseAction to find type
 	var baseAction types.BaseAction
-	if err := json.Unmarshal(input.Data, &baseAction); err != nil {
+	if err := json.Unmarshal(dataBytes, &baseAction); err != nil {
 		return fmt.Errorf("failed to parse action data: %w", err)
 	}
 
@@ -80,13 +88,13 @@ func CreateAction(input CreateActionInput) error {
 		return fmt.Errorf("action kind is required")
 	}
 
-	// 2. Based on kind, get specific struct
+	// 3. Based on kind, get specific struct
 	action, err := getActionStruct(baseAction.Kind)
 	if err != nil {
 		return err
 	}
 
-	if err := json.Unmarshal(input.Data, action); err != nil {
+	if err := json.Unmarshal(dataBytes, action); err != nil {
 		return fmt.Errorf("failed to parse specific action structure: %w", err)
 	}
 
@@ -133,8 +141,13 @@ func UpdateAction(input UpdateActionInput) error {
 	}
 
 	// Unmarshal JSON to get Kind
+	dataBytes, err := json.Marshal(input.Data)
+	if err != nil {
+		return fmt.Errorf("failed to process action data: %w", err)
+	}
+
 	var baseAction types.BaseAction
-	if err := json.Unmarshal(input.Data, &baseAction); err != nil {
+	if err := json.Unmarshal(dataBytes, &baseAction); err != nil {
 		return fmt.Errorf("failed to parse action data: %w", err)
 	}
 	if baseAction.Kind == "" {
@@ -148,7 +161,7 @@ func UpdateAction(input UpdateActionInput) error {
 	}
 
 	// Unmarshal full data
-	if err := json.Unmarshal(input.Data, action); err != nil {
+	if err := json.Unmarshal(dataBytes, action); err != nil {
 		return fmt.Errorf("failed to parse specific action structure: %w", err)
 	}
 

@@ -101,3 +101,32 @@ func (a *App) SelectDirectory() (string, error) {
 		Title: "Select Collection Directory",
 	})
 }
+
+// GetActionKinds returns all supported action kinds
+func (a *App) GetActionKinds() []types.Kind {
+	return []types.Kind{
+		types.KindLambdaInvoke,
+		types.KindSQSSend,
+		types.KindSQSReceive,
+		types.KindSQSDelete,
+		types.KindSQSPurge,
+		types.KindSQSMoveTask,
+		types.KindSNSPublish,
+		types.KindEventBridgePutEvents,
+		types.KindEC2DescribeInstances,
+		types.KindEC2StartInstances,
+		types.KindEC2StopInstances,
+		types.KindEC2RebootInstances,
+		types.KindEC2TerminateInstances,
+		types.KindRDSDescribeDBInstances,
+		types.KindRDSStartDBInstance,
+		types.KindRDSStopDBInstance,
+		types.KindRDSRebootDBInstance,
+		types.KindSFNListStateMachines,
+		types.KindSFNStartExecution,
+		types.KindSFNDescribeExecution,
+		types.KindSFNStopExecution,
+		types.KindSESSendEmail,
+		types.KindSESVerifyEmailIdentity,
+	}
+}

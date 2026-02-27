@@ -42,7 +42,7 @@ export namespace collection {
 	    collection_path: string;
 	    sub_path: string;
 	    file_name: string;
-	    data: number[];
+	    data: any;
 	
 	    static createFrom(source: any = {}) {
 	        return new CreateActionInput(source);
@@ -76,7 +76,7 @@ export namespace collection {
 	    collection_path: string;
 	    sub_path: string;
 	    file_name: string;
-	    data: number[];
+	    data: any;
 	
 	    static createFrom(source: any = {}) {
 	        return new UpdateActionInput(source);

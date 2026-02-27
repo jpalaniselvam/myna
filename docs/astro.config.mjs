@@ -9,6 +9,7 @@ export default defineConfig({
 	integrations: [
 		starlight({
 			title: 'Myna',
+			customCss: ['./src/styles/custom.css'],
 			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/jpalaniselvam/myna' }],
 			sidebar: [
 				{

@@ -1,0 +1,9 @@
+version = "1.0"
+kind = "dynamodb.update_item"
+description = "Update user age"
+
+[dynamodb]
+table_name = "myna-test-users"
+key = { "UserId" = "user-1" }
+update_expression = "SET Age = :newAge"
+expression_attribute_values = { ":newAge" = 26 }

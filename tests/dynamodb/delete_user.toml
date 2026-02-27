@@ -1,0 +1,7 @@
+version = "1.0"
+kind = "dynamodb.delete_item"
+description = "Delete user item"
+
+[dynamodb]
+table_name = "myna-test-users"
+key = { "UserId" = "user-1" }

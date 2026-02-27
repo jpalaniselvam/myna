@@ -34,6 +34,10 @@ export function GetAction(arg1) {
   return window['go']['main']['App']['GetAction'](arg1);
 }
 
+export function GetActionKinds() {
+  return window['go']['main']['App']['GetActionKinds']();
+}
+
 export function GetCollection(arg1) {
   return window['go']['main']['App']['GetCollection'](arg1);
 }

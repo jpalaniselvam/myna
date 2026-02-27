@@ -212,22 +212,27 @@ func BuildExecutionContext(actionPath, envName string) (*ExecutionContext, error
 		resolver.AddScope(collection.Pre)
 	}
 
+	var creds *baseTypes.Credentials
+	if collection != nil {
+		creds = &collection.Credentials
+	}
+
 	return &ExecutionContext{
 		Resolver:    resolver,
 		Collection:  collection,
-		Credentials: &collection.Credentials,
+		Credentials: creds,
 	}, nil
 }
 
 // InheritConfig returns profile and region, inheriting from collection if action values are empty
 func (ctx *ExecutionContext) InheritConfig(actionProfile, actionRegion string) (profile, region string) {
 	profile = actionProfile
-	if profile == "" {
+	if profile == "" && ctx.Credentials != nil {
 		profile = ctx.Credentials.Profile
 	}
 
 	region = actionRegion
-	if region == "" {
+	if region == "" && ctx.Credentials != nil {
 		region = ctx.Credentials.Region
 	}
 

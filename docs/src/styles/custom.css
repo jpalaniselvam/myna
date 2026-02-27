@@ -1,0 +1,10 @@
+/* Custom styles for Myna Docs */
+
+/* Ensure the Lucide icons in Tabs are sized correctly */
+[slot="icon"] svg {
+    vertical-align: middle;
+    margin-right: 0.25rem;
+}
+
+/* We've moved most card-specific styling into LucideCard.astro component styles */
+/* But we can add global utility classes here if needed */

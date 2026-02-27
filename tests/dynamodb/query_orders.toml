@@ -1,0 +1,8 @@
+version = "1.0"
+kind = "dynamodb.query"
+description = "Query orders for a user"
+
+[dynamodb]
+table_name = "myna-test-orders"
+key_condition_expression = "UserId = :uid"
+expression_attribute_values = { ":uid" = "user-1" }
