@@ -1,5 +1,5 @@
 
-export type TabKind = 'collection';
+export type TabKind = 'collection' | 'action';
 
 export interface Tab {
     id: string;
