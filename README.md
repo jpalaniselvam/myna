@@ -16,7 +16,9 @@ Think **Postman for AWS serverless**
 
 Modern serverless systems are built from events, queues, and functions, not HTTP endpoints.
 
-But most developer tools are still API-first.
+But most developer tools are still API-first. Read more at [Docs](https://jpalaniselvam.github.io/myna/)
+
+Installation instructions [Link](https://jpalaniselvam.github.io/myna/getting-started/installation)
 
 `myna` is designed for:
 
